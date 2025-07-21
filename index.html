@@ -580,9 +580,9 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
 
 
         // Theme shop logic
-        const themes = [
+         const themes = [
             { name: "Classic", bundle: "Starter",price: 0, bg: "#f4f4f4", btn: "#d35400",Tb: "#e6e6e6", text: "#222",},
-            { name: "Night", bundle: "Starter", price: 30, bg: "#222", btn: "#34495e",Tb: "#4f4f4f ", text: "#fff" ,},
+            { name: "Night", bundle: "Starter", price: 0, bg: "#222", btn: "#34495e",Tb: "#4f4f4f ", text: "#fff" ,},
            
 
             { name: "Monochrome", bundle: "Basic", price: 30, bg: "#f4f4f4", btn: "#f4f4f4",Tb: "#4f4f4f", text: "#222" ,},
@@ -590,45 +590,42 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
 
 
 { name: "Forest",bundle: "Botanica", price: 45, bg: "#e8f5e9", btn: "#4caf50",Tb: "#c8e6c9", text: "#222" ,},
-{ name: "Mint", bundle: "Botanica",price: 60, bg: "#e8f8f5", btn: "#16a085",Tb: "#aedaa0", text: "#222", },
-{ name: "Lavender",bundle: "Botanica", price: 90, bg: "#f3e5f5", btn: "#9c27b0",Tb: "#d1c4e9", text: "#222" ,},
+{ name: "Mint", bundle: "Botanica",price: 45, bg: "#e8f8f5", btn: "#16a085",Tb: "#aedaa0", text: "#222", },
+{ name: "Lavender",bundle: "Botanica", price: 45, bg: "#f3e5f5", btn: "#9c27b0",Tb: "#d1c4e9", text: "#222" ,},
 
-            { name: "Ocean",bundle: "Skynature", price: 45, bg: "#e0f7fa", btn: "#00bcd4",Tb: "#b2ebf2", text: "#222" ,},
-            { name: "Sunset",bundle: "Skynature", price: 45, bg: "#fff3e0", btn: "#ff9800",Tb: "#ffe0b2", text: "#222" ,},
-            { name: "Twilight", bundle: "Skynature",price: 45, bg: "#fce4ec", btn: "#e91e63",Tb: "#f8bbd0", text: "#222" ,},
+            { name: "Ocean",bundle: "Skynature", price: 60, bg: "#e0f7fa", btn: "#00bcd4",Tb: "#b2ebf2", text: "#222" ,},
+            { name: "Sunset",bundle: "Skynature", price: 60, bg: "#fff3e0", btn: "#ff9800",Tb: "#ffe0b2", text: "#222" ,},
+            { name: "Twilight", bundle: "Skynature",price: 60, bg: "#fce4ec", btn: "#e91e63",Tb: "#f8bbd0", text: "#222" ,},
 
 
-  { name: "Lemon", bundle: "Fruit",price: 60, bg: "#fffde7", btn: "#ffeb3b",Tb: "#fff9c4", text: "#222" ,},
-  { name: "Pineapple", bundle: "Fruit",price: 60, bg: "#fffde7", btn: "#f0e310",Tb: "#bdf17f", text: "#222" ,},
-    { name: "Melon",bundle: "Fruit", price: 60, bg: "#ff9b89", btn: "#6dc053",Tb: "#de7c72", text: "#222" ,},
-  { name: "Tomato!", bundle: "Fruit",price: 60, bg: "#ffebee", btn: "#f44336",Tb: "#ffcdd2", text: "#222" ,},
+  { name: "Lemon", bundle: "Fruit",price: 75, bg: "#fffde7", btn: "#ffeb3b",Tb: "#fff9c4", text: "#222" ,},
+  { name: "Pineapple", bundle: "Fruit",price: 75, bg: "#fffde7", btn: "#f0e310",Tb: "#bdf17f", text: "#222" ,},
+    { name: "Melon",bundle: "Fruit", price: 75, bg: "#ff9b89", btn: "#6dc053",Tb: "#de7c72", text: "#222" ,},
+  { name: "Tomato", bundle: "Fruit",price: 75, bg: "#ffebee", btn: "#f44336",Tb: "#ffcdd2", text: "#222" ,},
 
   
     
           
             { name: "Slate", bundle: "Mineral Mist",price: 90, bg: "#eceff1", btn: "#607d8b",Tb: "#cfd8dc", text: "#222" ,},
-          
             { name: "Violet", bundle: "Mineral Mist",price: 90, bg: "#bf9ae0", btn: "#763ef7",Tb: "#b886c2", text: "#222" ,},          
             { name: "Rose",bundle: "Mineral Mist", price: 90, bg: "#fff0f5", btn: "#e84393",Tb: "#dcbcd4", text: "#222" ,},
 
            
-     
-         
          { name: "Copper",bundle: "Royal Metals", price: 120, bg: "#ffccbc", btn: "#ff7043",Tb: "#ffab91", text: "#222" ,},
             { name: "Platinum", bundle: "Royal Metals",price: 120, bg: "#e0e0e0", btn: "#b0bec5",Tb: "#cfd8dc", text: "#222" ,},
                 { name: "Bronze",bundle: "Royal Metals", price: 120, bg: "#f4f4f4", btn: "#cd7f32",Tb: "#d2b48c", text: "#222" ,},
               { name: "Silver",bundle: "Royal Metals", price: 120, bg: "#f5f5f5", btn: "#9e9e9e",Tb: "#bdbdbd", text: "#222" ,},
             { name: "Golden",bundle: "Royal Metals", price: 120, bg: "#ebd8aa", btn: "#FFC300",Tb: "#d9bf68", text: "#222" ,},
 
-                   
+
+            
             {name: "Sapphire", bundle: "Gemstone", price: 180, bg: "#e3f2fd", btn: "#2196f3",Tb: "#bbdefb", text: "#222" ,},
-           { name: "Amethyst", bundle: "Gemstone", price: 180, bg: "#E6D6F3", btn: "#6A4C93",Tb: "#B088CC", text: "#222" ,},
-      { name: "Diamond", bundle: "Gemstone",price: 180, bg: "#96cee8", btn: "#f259ff",Tb: "#ddadf7", text: "#222" ,},
-                    
-      
+            { name: "Amethyst", bundle: "Gemstone", price: 180, bg: "#E6D6F3", btn: "#6A4C93",Tb: "#B088CC", text: "#222" ,},
+          { name: "Diamond", bundle: "Gemstone",price: 180, bg: "#F0F8FF", btn: "#8DA9C4",Tb: "#C8D8E4", text: "#222" ,},
+          
+           
 
-
-
+    
 
            
            
