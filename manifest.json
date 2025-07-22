@@ -1,12 +1,12 @@
 {
-  "name": "Pomocoin",
-  "short_name": "Pomodoro Coin App",
+  "name": "Pomodoro Coin App",
+  "short_name": "Pomocoin",
   "start_url": "./",
   "display": "standalone",
     "description": "A Pomodoro timer app that rewards you with coins for completing tasks.",
 
   "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
+  "theme_color": "#fff890",
   "icons": [
     {
       "src": "./images/icon1.png",

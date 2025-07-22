@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Pomocoin</title>
    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#ff5252" >
+    <meta name="theme-color" content="#ffeb3b" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -329,17 +329,30 @@ button:disabled {
 </head>
     <!-- Service Worker Registration for PWA -->
     <script>
-     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-         navigator.serviceWorker.register('./service-worker.js')
-            .then(function(registration) {
-             console.log('ServiceWorker registration successful:', registration);
-           })
-            .catch(function(error) {
-              console.log('ServiceWorker registration failed:', error);
-            });
-       });
-      }
+    if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(function(registration) {
+        console.log('ServiceWorker registration successful:', registration);
+
+        // Güncelleme algılama event’i burada
+        registration.addEventListener('updatefound', () => {
+          const newSW = registration.installing;
+          newSW.addEventListener('statechange', () => {
+            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+              // Yeni sürüm yüklendi, kullanıcıya bildir
+              alert('A new version is available! Please refresh the page.');
+            }
+          });
+        });
+
+      })
+      .catch(function(error) {
+        console.log('ServiceWorker registration failed:', error);
+      });
+  });
+}
+
 
     </script>
 </body>
@@ -581,7 +594,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
 
         // Theme shop logic
          const themes = [
-            { name: "Classic", bundle: "Starter",price: 0, bg: "#f4f4f4", btn: "#d35400",Tb: "#e6e6e6", text: "#222",},
+            { name: "Classic", bundle: "Starter",price: 0, bg: "#f4f4f4", btn: "#ffeb3b",Tb: "#e6e6e6", text: "#222",},
             { name: "Night", bundle: "Starter", price: 0, bg: "#222", btn: "#34495e",Tb: "#4f4f4f ", text: "#fff" ,},
            
 
@@ -889,6 +902,10 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             selectedTheme = themeName;
             const theme = themes.find(t => t.name === themeName);
           //      const fontstyle = choosentheme.FS || "";
+
+          //Update top bar
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', theme.Tb);
+          //Update head
 
             document.body.style.background = theme.bg;
             document.querySelector('.container').style.background = theme.bg;
