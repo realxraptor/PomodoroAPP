@@ -2,7 +2,7 @@
 const CACHE_NAME = "v1.0.5";
 const CACHE_ASSETS = [
   "index.html",
-  "images/icon1.jpg",
+  "images/icon1.png",
   "manifest.json"
 ];
 
