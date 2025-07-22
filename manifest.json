@@ -1,7 +1,7 @@
 {
   "name": "Pomocoin",
   "short_name": "Pomodoro Coin App",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "fullscreen",
     "description": "A Pomodoro timer app that rewards you with coins for completing tasks.",
 
