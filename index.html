@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-  
+
 
 
 /* --- Responsive Layout & Flexbox --- */
@@ -235,6 +235,7 @@ button:disabled {
 }
 @media (max-width: 768px) {
   #topBar {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     padding: 0.5em 0.5em;
@@ -272,58 +273,7 @@ button:disabled {
   }
 }
 
-/* --- Responsive Media Queries --- */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
-    gap: 16px;
-    align-items: center;
-  }
-  .container {
-    max-width: 98vw;
-    margin: 16px auto;
-    padding: 1em;
-    font-size: 1em;
-  }
-  h2 {
-    font-size: 1.5em;
-      text-align: center;
-  }
-  .timer {
-    font-size: 2em;
-  }
-  #customAlert {
-    font-size: 15px;
-    top: 10px;
-    padding: 10px 12px;
-    max-width: 98vw;
-  }
-}
-@media (max-width: 480px) {
-  .container {
-    max-width: 100vw;
-    margin: 8px auto;
-    padding: 0.5em;
-    font-size: 0.95em;
-  }
-  h1 {
-    font-size: 1.2em;
-  }
-  .timer {
-    font-size: 1.2em;
-  }
-  button, .settingsBtn, .themeBtn {
-    font-size: 0.95em;
-    padding: 8px 8px;
-    margin: 4px 2px;
-  }
-  #customAlert {
-    font-size: 13px;
-    top: 5px;
-    padding: 8px 6px;
-    max-width: 99vw;
-  }
-}
+
 /* --- End Responsive Layout --- */
     </style>
 </head>
@@ -377,25 +327,63 @@ button:disabled {
         <h1 id="mainTitle" style="display:none;"></h1>
         <div class="tabContents">
             <div id="pomodoroTab" class="tabContent" style="display:block;">
-                     <h2 id="CounterTitle" style="text-align:center; color:#0b0b0b;">Pomodoro</h2>
+                <h2 id="CounterTitle" style="text-align:center; color:#0b0b0b;">Pomodoro</h2>
                 <div class="coins">Coins: <span id="coinCount">0</span></div>
+                <!-- Timer Mode Selector -->
                 <div style="text-align:center; margin-bottom:16px;">
-                    <label for="pomodoroTime">Set Time (minutes): </label>
-                    <input type="number" id="pomodoroTime" min="1" max="120" value="25" style="width:60px;">
+                    <label><input type="radio" name="timerMode" id="studyMode" value="study" checked> Study</label>
+                    <label><input type="radio" name="timerMode" id="breakMode" value="break"> Break</label>
+                    <label><input type="radio" name="timerMode" id="stopwatchMode" value="stopwatch"> Stopwatch</label>
                 </div>
-                <div class="timer" id="timer">25:00</div>
-                <div class="controls">
-                    <button id="startBtn">Start</button>
-                    <button id="pauseBtn" disabled>Pause</button>
-                    <button id="resetBtn">Reset</button>
+                <!-- Study Timer UI -->
+                <div id="studyTimerUI">
+                    <div style="text-align:center; margin-bottom:16px;">
+                        <label for="pomodoroTime">Set Study Time (minutes): </label>
+                        <input type="number" id="pomodoroTime" min="1" max="120" value="25" style="width:60px;">
+                    </div>
+                    <div class="timer" id="timer">25:00</div>
+                    <div class="controls">
+                        <button id="startBtn">Start</button>
+                        <button id="pauseBtn" disabled>Pause</button>
+                        <button id="resetBtn">Reset</button>
+                    </div>
+                    <p style="text-align:center; color:#888; margin-top:24px;">
+                        Earn 1 coin for every minute you study!
+                    </p>
                 </div>
-                <p style="text-align:center; color:#888; margin-top:24px;">
-                    Earn 1 coin for every minute you study!
-                </p>
-                  <div style="text-align:center; margin:24px 0;">
-                    <label for="goalInput">Set Goal (coins): </label>
-                    <input type="number" id="goalInput" min="1" value="100" style="width:80px;">
+                <!-- Break Timer UI -->
+                <div id="breakTimerUI" style="display:none;">
+                    <div style="text-align:center; margin-bottom:16px;">
+                        <label for="breakTime">Set Break Time (minutes): </label>
+                        <input type="number" id="breakTime" min="1" max="60" value="5" style="width:60px;">
+                    </div>
+                    <div class="timer" id="breakTimer">05:00</div>
+                    <div class="controls">
+                        <button id="breakStartBtn">Start Break</button>
+                        <button id="breakPauseBtn" disabled>Pause</button>
+                        <button id="breakResetBtn">Reset</button>
+                    </div>
+                    <p style="text-align:center; color:#888; margin-top:24px;">
+                        Break timer does not award coins.
+                    </p>
                 </div>
+                <!-- Stopwatch UI -->
+                <div id="stopwatchUI" style="display:none;">
+                    <div class="timer" id="stopwatchTimer">00:00</div>
+                    <div class="controls">
+                        <button id="stopwatchStartBtn">Start</button>
+                        <button id="stopwatchPauseBtn" disabled>Pause</button>
+                        <button id="stopwatchResetBtn">Reset</button>
+                    </div>
+                    <p style="text-align:center; color:#888; margin-top:24px;">
+                        Earn 1 coin for every minute until you reach your goal!
+                    </p>
+                </div>
+           
+                <div style="text-align:center; margin:24px 0;" id="goalLabel">
+                    <label for="goalLabel"> Goal: </label>
+                </div>
+
                 <div style="text-align:center; margin:24px 0;">
                     <div style="width:90%;margin:auto;">
                         <div id="progressBarContainer">
@@ -413,68 +401,31 @@ button:disabled {
                 <h3 style="text-align:center; color:#888;">Inventory</h3>
                 <div id="inventoryThemes" style="text-align:center;"></div>
             </div>
-
-
             <div id="settingsTab" class="tabContent" style="display:none;">
                 <h2 style="text-align:center;" id="settingsTitle">Settings</h2>
                 <div style="text-align:center; margin:24px 0;">
                     <button id="deleteDataBtn" class="settingsBtn">Delete Coin & Inventory Data</button>
                 </div>
-              
+                <div style="text-align:center; margin:24px 0;">
+                    <label for="goalInput">Set Goal (coins): </label>
+                    <input type="number" id="goalInput" min="1" value="100" style="width:80px;">
+                </div>
             </div>
             <!-- New To Do List Tab -->
             <div id="todoTab" class="tabContent" style="display:none;">
                 <h2 style="text-align:center;">To Do List</h2>
                 <div class="coins">Coins: <span id="coinCountTDL">0</span></div>
-                <div id="weekTodoLists">
-                  <!-- 7 containers for each day, displayed as columns -->
-                  <div style="display: flex; flex-direction: row; gap: 16px; justify-content: center; align-items: flex-start; flex-wrap: wrap;">
-                    <div class="todoDayContainer" id="todoDay0" style="flex:1 1 180px; min-width:110px; max-width:140px; margin-bottom:32px; border-radius:8px; background:#f8f8f8; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:16px;">
-                      <h3 style="text-align:center; color:#d35400; margin-top:0;">Monday</h3>
-                      <p style="text-align:center; color:#888;" id="completionEstimate0">Estimated finish time: --:--</p>
-                      <button id="addActivityBtn0" class="settingsBtn">Add Activity</button>
-                      <div id="activityList0"></div>
+                <div id="todoListContainer" style="max-width:600px; margin:32px auto; background:#f8f8f8; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:32px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                        <span id="completionEstimate" style="color:#888; font-size:1.1em;">Estimated finish time: --:--</span>
+                        <button id="addActivityBtn" class="settingsBtn" style="font-size:1.1em; padding:12px 32px;">Add Activity</button>
                     </div>
-                    <div class="todoDayContainer" id="todoDay1" style="flex:1 1 180px; min-width:110px; max-width:140px; margin-bottom:32px; border-radius:8px; background:#f8f8f8; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:16px;">
-                      <h3 style="text-align:center; color:#d35400; margin-top:0;">Tuesday</h3>
-                      <p style="text-align:center; color:#888;" id="completionEstimate1">Estimated finish time: --:--</p>
-                      <button id="addActivityBtn1" class="settingsBtn">Add Activity</button>
-                      <div id="activityList1"></div>
-                    </div>
-                    <div class="todoDayContainer" id="todoDay2" style="flex:1 1 180px; min-width:110px; max-width:140px; margin-bottom:32px; border-radius:8px; background:#f8f8f8; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:16px;">
-                      <h3 style="text-align:center; color:#d35400; margin-top:0;">Wednesday</h3>
-                      <p style="text-align:center; color:#888;" id="completionEstimate2">Estimated finish time: --:--</p>
-                      <button id="addActivityBtn2" class="settingsBtn">Add Activity</button>
-                      <div id="activityList2"></div>
-                    </div>
-                    <div class="todoDayContainer" id="todoDay3" style="flex:1 1 180px; min-width:110px; max-width:140px; margin-bottom:32px; border-radius:8px; background:#f8f8f8; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:16px;">
-                      <h3 style="text-align:center; color:#d35400; margin-top:0;">Thursday</h3>
-                      <p style="text-align:center; color:#888;" id="completionEstimate3">Estimated finish time: --:--</p>
-                      <button id="addActivityBtn3" class="settingsBtn">Add Activity</button>
-                      <div id="activityList3"></div>
-                    </div>
-                    <div class="todoDayContainer" id="todoDay4" style="flex:1 1 180px; min-width:110px; max-width:140px; margin-bottom:32px; border-radius:8px; background:#f8f8f8; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:16px;">
-                      <h3 style="text-align:center; color:#d35400; margin-top:0;">Friday</h3>
-                      <p style="text-align:center; color:#888;" id="completionEstimate4">Estimated finish time: --:--</p>
-                      <button id="addActivityBtn4" class="settingsBtn">Add Activity</button>
-                      <div id="activityList4"></div>
-                    </div>
-                    <div class="todoDayContainer" id="todoDay5" style="flex:1 1 180px; min-width:110px; max-width:140px; margin-bottom:32px; border-radius:8px; background:#f8f8f8; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:16px;">
-                      <h3 style="text-align:center; color:#d35400; margin-top:0;">Saturday</h3>
-                      <p style="text-align:center; color:#888;" id="completionEstimate5">Estimated finish time: --:--</p>
-                      <button id="addActivityBtn5" class="settingsBtn">Add Activity</button>
-                      <div id="activityList5"></div>
-                    </div>
-                    <div class="todoDayContainer" id="todoDay6" style="flex:1 1 180px; min-width:110px; max-width:140px; margin-bottom:32px; border-radius:8px; background:#f8f8f8; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:16px;">
-                      <h3 style="text-align:center; color:#d35400; margin-top:0;">Sunday</h3>
-                      <p style="text-align:center; color:#888;" id="completionEstimate6">Estimated finish time: --:--</p>
-                      <button id="addActivityBtn6" class="settingsBtn">Add Activity</button>
-                      <div id="activityList6"></div>
-                    </div>
-                  </div>
+                    <div id="activityList"></div>
                 </div>
                 <div id="customAlert" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #2ecc71; color: white; padding: 12px 24px; border-radius: 8px; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 9999; transition: opacity 0.3s; max-width: 90vw; text-align: center; word-break: break-word;"></div>
             </div>
+
+
         </div>
     </div>
 
@@ -494,12 +445,20 @@ button:disabled {
 </div>
 
     <script>
-        // Pomodoro logic
+        // Pomodoro logic - Three Timer Modes
         let timer = 25 * 60;
         let interval = null;
         let coins = 0; // coin balance is loaded from localStorage
         let lastMinute = 25;
         let pomodoroDuration = 25;
+        // Break timer
+        let breakTimer = 5 * 60;
+        let breakInterval = null;
+        let breakDuration = 5;
+        // Stopwatch
+        let stopwatchSeconds = 0;
+        let stopwatchInterval = null;
+        let stopwatchRunning = false;
 
         // --- Persistent Coin Logic ---
         // Save/load coins and last reset date from localStorage
@@ -666,34 +625,58 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('timer').textContent =
                 `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
-        
-       function updateProgressBar() {
+        function updateBreakTimerDisplay() {
+            const minutes = Math.floor(breakTimer / 60);
+            const seconds = breakTimer % 60;
+            document.getElementById('breakTimer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        function updateStopwatchDisplay() {
+            const minutes = Math.floor(stopwatchSeconds / 60);
+            const seconds = stopwatchSeconds % 60;
+            document.getElementById('stopwatchTimer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        function updateProgressBar() {
             let percent = Math.min(100, Math.floor((coins / goal) * 100));
             document.getElementById('progressBar').style.width = percent + '%';
             document.getElementById('progressText').textContent = percent + '%';
         }
-   
         function updateCoinsDisplay() {
             document.getElementById('coinCount').textContent = coins;
             document.getElementById('coinCountShop').textContent = coins;
             document.getElementById('coinCountTDL').textContent = coins;
-         
-
         }
 
+        // --- Timer Mode Logic ---
+        function showTimerMode(mode) {
+            document.getElementById('studyTimerUI').style.display = (mode === 'study') ? 'block' : 'none';
+            document.getElementById('breakTimerUI').style.display = (mode === 'break') ? 'block' : 'none';
+            document.getElementById('stopwatchUI').style.display = (mode === 'stopwatch') ? 'block' : 'none';
+        }
+        function setTimerModeDisabled(disabled) {
+            document.getElementById('studyMode').disabled = disabled;
+            document.getElementById('breakMode').disabled = disabled;
+            document.getElementById('stopwatchMode').disabled = disabled;
+        }
+        function getSelectedTimerMode() {
+            if (document.getElementById('studyMode').checked) return 'study';
+            if (document.getElementById('breakMode').checked) return 'break';
+            if (document.getElementById('stopwatchMode').checked) return 'stopwatch';
+            return 'study';
+        }
+        // --- Study Timer ---
         function startTimer() {
             if (interval) return;
             document.getElementById('startBtn').disabled = true;
             document.getElementById('pauseBtn').disabled = false;
+            setTimerModeDisabled(true);
             interval = setInterval(() => {
                 if (timer > 0) {
                     timer--;
                     const currentMinute = Math.floor(timer / 60);
-                    if (timer % 60 === 0) { 
-                        addCoins(1); // use persistent addCoins
+                    if (timer % 60 === 0) {
+                        addCoins(1);
                         lastMinute = currentMinute;
-                   }// Close if here 
-                
+                    }
                     updateTimerDisplay();
                     calculateCompletionTimeEstimate();
                 } else {
@@ -701,19 +684,26 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
                     interval = null;
                     document.getElementById('startBtn').disabled = false;
                     document.getElementById('pauseBtn').disabled = true;
+                    // Auto-switch to break mode if break is enabled
+                    if (document.getElementById('breakTime')) {
+                        document.getElementById('breakMode').checked = true;
+                        showTimerMode('break');
+                        resetBreakTimer();
+                        startBreakTimer();          
+                        showCustomAlert("Study session complete! Time for a break.", "info");
+                    }
                 }
             }, 1000);
         }
-
         function pauseTimer() {
             if (interval) {
                 clearInterval(interval);
                 interval = null;
                 document.getElementById('startBtn').disabled = false;
                 document.getElementById('pauseBtn').disabled = true;
+                setTimerModeDisabled(false);
             }
         }
-
         function resetTimer() {
             pauseTimer();
             pomodoroDuration = parseInt(document.getElementById('pomodoroTime').value) || 25;
@@ -722,13 +712,111 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('pauseBtn').disabled = true;
             updateTimerDisplay();
         }
-
+        // --- Break Timer ---
+        function startBreakTimer() {
+            if (breakInterval) return;
+            document.getElementById('breakStartBtn').disabled = true;
+            document.getElementById('breakPauseBtn').disabled = false;
+            setTimerModeDisabled(true);
+            breakInterval = setInterval(() => {
+                if (breakTimer > 0) {
+                    breakTimer--;
+                    updateBreakTimerDisplay();
+                } else {
+                    clearInterval(breakInterval);
+                    breakInterval = null;
+                    document.getElementById('breakStartBtn').disabled = false;
+                    document.getElementById('breakPauseBtn').disabled = true;
+                     if (document.getElementById('timer')) {
+                        document.getElementById('studyMode').checked = true;
+                        showTimerMode('study');
+                        resetTimer();
+                        startTimer();         
+                        showCustomAlert("Break session complete! Study time!", "info");
+                    }
+                }
+            }, 1000);
+        }
+        function pauseBreakTimer() {
+            if (breakInterval) {
+                clearInterval(breakInterval);
+                breakInterval = null;
+                document.getElementById('breakStartBtn').disabled = false;
+                document.getElementById('breakPauseBtn').disabled = true;
+                setTimerModeDisabled(false);
+            }
+        }
+        function resetBreakTimer() {
+            pauseBreakTimer();
+            breakDuration = parseInt(document.getElementById('breakTime').value) || 5;
+            breakTimer = breakDuration * 60;
+            document.getElementById('breakPauseBtn').disabled = true;
+            updateBreakTimerDisplay();
+        }
+        // --- Stopwatch Timer ---
+        function startStopwatch() {
+            if (stopwatchInterval || coins >= goal) return;
+            stopwatchRunning = true;
+            document.getElementById('stopwatchStartBtn').disabled = true;
+            document.getElementById('stopwatchPauseBtn').disabled = false;
+            setTimerModeDisabled(true);
+            stopwatchInterval = setInterval(() => {
+                if (coins >= goal) {
+                    pauseStopwatch();
+                    showCustomAlert("Goal reached! Stopwatch paused.", "success");
+                    return;
+                }
+                stopwatchSeconds++;
+                updateStopwatchDisplay();
+                if (stopwatchSeconds % 60 === 0) {
+                    addCoins(1);
+                }
+            }, 1000);
+        }
+        function pauseStopwatch() {
+            if (stopwatchInterval) {
+                clearInterval(stopwatchInterval);
+                stopwatchInterval = null;
+                stopwatchRunning = false;
+                document.getElementById('stopwatchStartBtn').disabled = false;
+                document.getElementById('stopwatchPauseBtn').disabled = true;
+                setTimerModeDisabled(false);
+            }
+        }
+        function resetStopwatch() {
+            pauseStopwatch();
+            stopwatchSeconds = 0;
+            updateStopwatchDisplay();
+            document.getElementById('stopwatchPauseBtn').disabled = true;
+        }
+        // --- Event Listeners for Timer Modes ---
+        document.getElementById('studyMode').addEventListener('change', function() {
+            showTimerMode('study');
+        });
+        document.getElementById('breakMode').addEventListener('change', function() {
+            showTimerMode('break');
+        });
+        document.getElementById('stopwatchMode').addEventListener('change', function() {
+            showTimerMode('stopwatch');
+        });
+        // Study Timer buttons
         document.getElementById('startBtn').addEventListener('click', startTimer);
         document.getElementById('pauseBtn').addEventListener('click', pauseTimer);
         document.getElementById('resetBtn').addEventListener('click', resetTimer);
         document.getElementById('pomodoroTime').addEventListener('change', function() {
             resetTimer();
         });
+        // Break Timer buttons
+        document.getElementById('breakStartBtn').addEventListener('click', startBreakTimer);
+        document.getElementById('breakPauseBtn').addEventListener('click', pauseBreakTimer);
+        document.getElementById('breakResetBtn').addEventListener('click', resetBreakTimer);
+        document.getElementById('breakTime').addEventListener('change', function() {
+            resetBreakTimer();
+        });
+        // Stopwatch buttons
+        document.getElementById('stopwatchStartBtn').addEventListener('click', startStopwatch);
+        document.getElementById('stopwatchPauseBtn').addEventListener('click', pauseStopwatch);
+        document.getElementById('stopwatchResetBtn').addEventListener('click', resetStopwatch);
              // Update completion estimate on activity list change
 
 // Removed buggy calculateCompletionTimeEstimate function.
@@ -938,6 +1026,24 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('pauseBtn').style.color = theme.text;
             document.getElementById('resetBtn').style.background = theme.btn;
             document.getElementById('resetBtn').style.color = theme.text;
+
+            // Update break timer buttons
+            document.getElementById('breakStartBtn').style.background = theme.btn;
+            document.getElementById('breakStartBtn').style.color = theme.text;
+            document.getElementById('breakPauseBtn').style.background = theme.btn;
+            document.getElementById('breakPauseBtn').style.color = theme.text;
+            document.getElementById('breakResetBtn').style.background = theme.btn;
+            document.getElementById('breakResetBtn').style.color = theme.text;
+
+            //Update stopwatch buttons
+            document.getElementById('stopwatchStartBtn').style.background = theme.btn;
+            document.getElementById('stopwatchStartBtn').style.color = theme.text;
+            document.getElementById('stopwatchPauseBtn').style.background = theme.btn;
+            document.getElementById('stopwatchPauseBtn').style.color = theme.text;
+            document.getElementById('stopwatchResetBtn').style.background = theme.btn;
+            document.getElementById('stopwatchResetBtn').style.color = theme.text;
+         
+
             // Update tab buttons
             document.getElementById('pomodoroTabBtn').style.background = theme.btn;
             document.getElementById('pomodoroTabBtn').style.color = theme.text;
@@ -947,6 +1053,9 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('settingsTabBtn').style.color = theme.text;
             document.getElementById('todoTabBtn').style.background = theme.btn;
             document.getElementById('todoTabBtn').style.color = theme.text;
+            document.getElementById('addActivityBtn').style.background = theme.btn;
+            document.getElementById('addActivityBtn').style.color = theme.text;
+
             // Style settings wipe button
             if (document.getElementById('deleteDataBtn')) {
                 document.getElementById('deleteDataBtn').style.background = theme.btn;
@@ -981,7 +1090,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
                     addBtn.style.color = theme.text;
                 }
                 // Activities
-                const activityList = document.getElementById('activityList' + i);
+                const activityList = document.getElementById('activityList');
                 if (activityList) {
                     activityList.querySelectorAll('.activity').forEach(div => {
                         div.style.background = theme.bg;
@@ -1025,20 +1134,21 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
                 localStorage.setItem('pomodoroCoins', coins);
                 localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
                 localStorage.setItem('pomodoroLastReset', today);
-
-
             } else {
                 coins = saved ? parseInt(saved) : 0;
             }
         }
-
         loadAllData();
         updateTimerDisplay();
+        updateBreakTimerDisplay();
+        updateStopwatchDisplay();
         updateCoinsDisplay();
         renderShop();
         renderInventory();
         selectTheme(selectedTheme);
-          updateProgressBar();
+        
+        updateProgressBar();
+        showTimerMode(getSelectedTimerMode());
 
         // Settings logic
         if (document.getElementById('deleteDataBtn')) {
@@ -1063,140 +1173,150 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             });
         }
         // Goal input change
+        
+        function SetGoal(NewGoal) {
+            goal = parseInt(NewGoal) || 1;
+            localStorage.setItem('pomodoroGoal', goal);
+            updateProgressBar();
+            document.getElementById('goalInput').value = goal;
+            document.getElementById('goalLabel').textContent = `Goal: ${goal} coins`;  
+            showCustomAlert(`Goal set to ${goal} coins!`, "info");
+            updateProgressBar();
+
+
+        }
+
+
+
         if (document.getElementById('goalInput')) {
             document.getElementById('goalInput').addEventListener('change', function() {
-                goal = parseInt(this.value) || 1;
-                localStorage.setItem('pomodoroGoal', goal);
-                updateProgressBar();
-                showCustomAlert(`Goal set to ${goal} coins!`, "info");
+           SetGoal(this.value);
             });
         }
 
         // To Do List logic
-// --- 7 separate To Do List containers for each day ---
-const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-let weekActivities = Array(7).fill().map(() => []);
+// ...existing code...
+// --- Single To Do List Container ---
+let todoActivities = [];
+function loadTodoActivities() {
+    const saved = localStorage.getItem('pomodoroActivities');
+    todoActivities = saved ? JSON.parse(saved) : [];
+    calculateCompletionTimeEstimate();
+}
+function saveTodoActivities() {
+    localStorage.setItem('pomodoroActivities', JSON.stringify(todoActivities));
+}
+function renderTodoActivities() {
+    const list = document.getElementById('activityList');
+    list.innerHTML = '';
+    if (todoActivities.length === 0) {
+        list.innerHTML = '<p style="color:#888; text-align:center; font-size:1.2em;">No activities yet.</p>';
+        return;
+    }
+    const themeObj = themes.find(t => t.name === selectedTheme) || themes[0];
+    todoActivities.forEach((act, idx) => {
+        const div = document.createElement('div');
+        div.className = 'activity';
+        div.style.display = 'flex';
+        div.style.flexDirection = 'row';
+        div.style.justifyContent = 'space-between';
+        div.style.alignItems = 'center';
+        div.style.background = themeObj.bg;
+        div.style.borderRadius = '10px';
+        div.style.margin = '16px 0';
+        div.style.padding = '18px 24px';
+        div.style.fontSize = '1.2em';
+        div.style.boxShadow = '0 1px 6px rgba(0,0,0,0.07)';
+        div.innerHTML = `<span style='font-weight:bold;'>${act.name}</span> <span style='margin-left:16px;'>${act.price} coins</span>`;
+        const btn = document.createElement('button');
+        btn.textContent = 'Complete';
+        btn.className = 'settingsBtn activityCompleteBtn';
+        btn.style.background = themeObj.btn;
+        btn.style.color = themeObj.text;
+        btn.style.fontSize = '1em';
+        btn.style.marginLeft = '24px';
+        btn.onclick = function() {
+            if (coins >= act.price) {
+                subtractCoins(act.price);
+                todoActivities.splice(idx, 1);
+                saveTodoActivities();
+                renderTodoActivities();
+                showCustomAlert(`Completed: ${act.name}`, "success");
+                calculateCompletionTimeEstimate();
+            } else {
+                showCustomAlert("Not enough coins!", "error");
+            }
+        };
 
-function loadWeekActivities() {
-  daysOfWeek.forEach((day, i) => {
-    const saved = localStorage.getItem('pomodoroActivities_' + day);
-    weekActivities[i] = saved ? JSON.parse(saved) : [];
-    calculateCompletionTimeEstimate(i);
-  });
-}
-function saveWeekActivities(dayIdx) {
-  localStorage.setItem('pomodoroActivities_' + daysOfWeek[dayIdx], JSON.stringify(weekActivities[dayIdx]));
-}
-function renderWeekActivities(dayIdx) {
-  const list = document.getElementById('activityList' + dayIdx);
-  list.innerHTML = '';
-  const activities = weekActivities[dayIdx];
-  if (activities.length === 0) {
-    list.innerHTML = '<p style="color:#888; text-align:center;">No activities yet.</p>';
-    return;
-  }
-  const themeObj = themes.find(t => t.name === selectedTheme) || themes[0];
-  // themeObj is the activity background, not the main theme background
-  activities.forEach((act, idx) => {
-    const div = document.createElement('div');
-    div.className = 'activity';
-    div.style.display = 'flex';
-    div.style.flexDirection = 'column';
-    div.style.justifyContent = 'space-between';
-    div.style.alignItems = 'center';
-    // Set background color to theme.bg (not themeObj.background)
-    div.style.background = themeObj.bg;
-    
-    div.style.borderRadius = '6px';
-    div.style.margin = '8px 0';
-    div.style.padding = '8px 12px';
-    div.innerHTML = `<span>${act.name} (${act.price} coins)</span>`;
-    const btn = document.createElement('button');
-    btn.textContent = 'Complete';
-    btn.className = 'settingsBtn activityCompleteBtn';
-    btn.style.background = themeObj.btn;
-    btn.style.color = themeObj.text;
-    btn.onclick = function() {
-      if (coins >= act.price) {
-        subtractCoins(act.price);
-        activities.splice(idx, 1);
-        saveWeekActivities(dayIdx);
-        renderWeekActivities(dayIdx);
-        showCustomAlert(`Completed: ${act.name}`, "success");
-        calculateCompletionTimeEstimate(dayIdx);
-        setTimeout(() => {
-          document.querySelectorAll(`#activityList${dayIdx} .activityCompleteBtn`).forEach(btn => {
-            btn.style.background = themeObj.btn;
-            btn.style.color = themeObj.text;
-          });
-        }, 0);
-      } else {
-        showCustomAlert("Not enough coins!", "error");
-      }
-    };
 
-    div.appendChild(btn);
-    list.appendChild(div);
-  });
+         const goalbtn = document.createElement('button');
+        goalbtn.textContent = 'Set Goal';
+        goalbtn.className = 'settingsBtn SetGoalBtn';
+        goalbtn.style.background = themeObj.btn;
+        goalbtn.style.color = themeObj.text;
+        goalbtn.style.fontSize = '1em';
+        goalbtn.style.marginLeft = '24px';
+        goalbtn.onclick = function() {
+            if (coins < act.price) {
+     
+            SetGoal(act.price);
+                 showCustomAlert(`Goal set to: ${act.price}`, "success");
+            } else {
+                showCustomAlert("You already have enough coins to complete this activity", "info");
+            }
+        };
+
+
+        div.appendChild(btn);
+        div.appendChild(goalbtn);
+        list.appendChild(div);
+    });
 }
-function calculateCompletionTimeEstimate(dayIdx) {
-  const activities = weekActivities[dayIdx];
-  const totalTaskCoins = activities.reduce((sum, task) => sum + task.price, 0);
-  const netCoinsNeeded = totalTaskCoins - coins;
-  const estimateElement = document.getElementById('completionEstimate' + dayIdx);
-  if (totalTaskCoins === 0) {
-    estimateElement.textContent = "No tasks available.";
-    return;
-  }
-  if (netCoinsNeeded <= 0) {
-    estimateElement.textContent = "All tasks can be completed with current coins!";
-    return;
-  }
-  const now = new Date();
-  const finishTime = new Date(now.getTime() + netCoinsNeeded * 60000);
-  const hours = finishTime.getHours().toString().padStart(2, '0');
-  const minutes = finishTime.getMinutes().toString().padStart(2, '0');
-  const timeString = `${hours}:${minutes}`;
-  estimateElement.textContent = `Estimated finish time: ${timeString} / ${netCoinsNeeded} more coins needed/ ${totalTaskCoins} total task coins`;
+function calculateCompletionTimeEstimate() {
+    const totalTaskCoins = todoActivities.reduce((sum, task) => sum + task.price, 0);
+    const netCoinsNeeded = totalTaskCoins - coins;
+    const estimateElement = document.getElementById('completionEstimate');
+    if (totalTaskCoins === 0) {
+        estimateElement.textContent = "No tasks available.";
+        return;
+    }
+    if (netCoinsNeeded <= 0) {
+        estimateElement.textContent = "All tasks can be completed with current coins!";
+        return;
+    }
+    const now = new Date();
+    const finishTime = new Date(now.getTime() + netCoinsNeeded * 60000);
+    const hours = finishTime.getHours().toString().padStart(2, '0');
+    const minutes = finishTime.getMinutes().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}`;
+    estimateElement.textContent = `Estimated finish time: ${timeString} / ${netCoinsNeeded} more coins needed / ${totalTaskCoins} total task coins`;
 }
 // Modal logic
 const modal = document.getElementById('activityModal');
-let currentDayIdx = 0;
-function setupAddActivityButtons() {
-  daysOfWeek.forEach((day, i) => {
-    const btn = document.getElementById('addActivityBtn' + i);
-    if (btn) {
-      btn.onclick = function() {
-        currentDayIdx = i;
-        modal.style.display = 'flex';
-        document.getElementById('activityNameInput').value = '';
-        document.getElementById('activityPriceInput').value = 10;
-      };
-    }
-  });
-}
-setupAddActivityButtons();
+document.getElementById('addActivityBtn').onclick = function() {
+    modal.style.display = 'flex';
+    document.getElementById('activityNameInput').value = '';
+    document.getElementById('activityPriceInput').value = 10;
+};
 document.getElementById('cancelActivityBtn').onclick = function() {
-  modal.style.display = 'none';
+    modal.style.display = 'none';
 };
 document.getElementById('confirmActivityBtn').onclick = function() {
-  const name = document.getElementById('activityNameInput').value.trim();
-  const price = parseInt(document.getElementById('activityPriceInput').value);
-  if (!name || !price || price < 1) {
-    alert('Please enter a valid name and coin price.');
-    return;
-  }
-  weekActivities[currentDayIdx].push({ name, price });
-  saveWeekActivities(currentDayIdx);
-  renderWeekActivities(currentDayIdx);
-  modal.style.display = 'none';
-  calculateCompletionTimeEstimate(currentDayIdx);
+    const name = document.getElementById('activityNameInput').value.trim();
+    const price = parseInt(document.getElementById('activityPriceInput').value);
+    if (!name || !price || price < 1) {
+        alert('Please enter a valid name and coin price.');
+        return;
+    }
+    todoActivities.push({ name, price });
+    saveTodoActivities();
+    renderTodoActivities();
+    modal.style.display = 'none';
+    calculateCompletionTimeEstimate();
 };
-// Initial render for all days
-loadWeekActivities();
-daysOfWeek.forEach((day, i) => {
-  renderWeekActivities(i);
-});
+// Initial render
+loadTodoActivities();
+renderTodoActivities();
     </script>
 </body>
 </html>
