@@ -498,7 +498,8 @@ button:disabled {
 
 
     <div class="container" id = "mainApp">
-        <h1 id="mainTitle" style="display:none;"></h1>
+    <h1 id="mainTitle" style="display:none;"></h1>
+    <div id="customAlert" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #2ecc71; color: white; padding: 12px 24px; border-radius: 8px; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 9999; transition: opacity 0.3s; max-width: 90vw; text-align: center; word-break: break-word;"></div>
         <div class="tabContents">
             <div id="pomodoroTab" class="tabContent" style="display:block;">
                 <h2 id="CounterTitle" style="text-align:center; color:#0b0b0b;">Pomodoro</h2>
@@ -556,7 +557,7 @@ button:disabled {
                         <button id="stopwatchResetBtn">Reset</button>
                     </div>
                     <p style="text-align:center; color:#888; margin-top:24px;">
-                        Earn 1 coin for every minute!
+                       Earn 1 coin for every minute you study!
                     </p>
                 </div>
            
@@ -572,6 +573,7 @@ button:disabled {
                         </div>
                     </div>
                 </div>
+             
             </div>
             <div id="shopTab" class="tabContent" style="display:none;">
                           <h2 id="shopTitle" style="text-align:center; color:#d35400;">Shop</h2>
@@ -580,13 +582,14 @@ button:disabled {
                 <div id="themesShop" style="margin-bottom:24px;"></div>
                 <h3 style="text-align:center; color:#888;">Inventory</h3>
                 <div id="inventoryThemes" style="text-align:center;"></div>
+                 
             </div>
             <div id="settingsTab" class="tabContent" style="display:none;">
                 <h2 style="text-align:center;" id="settingsTitle">Settings</h2>
 
      <div style="display: flex; align-items: center; margin: 24px 0;">
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
-  <span style="padding: 0 12px; color: #888; font-weight: bold;">Main</span>
+  <span style="padding: 0 12px; color: #888; font-weight: bold;">Pomodoro</span>
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
 </div>
 
@@ -594,25 +597,87 @@ button:disabled {
                     <label for="goalInput">Set Goal (coins): </label>
                     <input type="number" id="goalInput" min="1" value="100" style="width:80px;">
                 </div>
-               
-                <label class="switch">
+              
+                      
+  <label class="switch">
   <input type="checkbox" id="SettingOne">
   <span class="slider"></span>
   <span class="label-text">Pause the stopwatch when the goal is achieved.</span>
 </label>
 
+ <label class="switch">
+  <input type="checkbox" id="AutoStartBreak">
+  <span class="slider"></span>
+  <span class="label-text">Auto start breaks.</span>
+</label>
+
+ <label class="switch">
+  <input type="checkbox" id="AutoStartStudy">
+  <span class="slider"></span>
+  <span class="label-text">Auto start study.</span>
+</label>
+
 <div style="display: flex; align-items: center; margin: 24px 0;">
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
-  <span style="padding: 0 12px; color: #888; font-weight: bold;">Data</span>
+  <span style="padding: 0 12px; color: #888; font-weight: bold;">Auto Data Delete</span>
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
 </div>
 
+<div style="text-align:center; margin:24px 0;">
+  <label class="switch">
+    <input type="checkbox" id="autoDeleteEnable">
+    <span class="slider"></span>
+    <span class="label-text">Enable Auto Data Delete</span>
+  </label>
+</div>
+<div style="text-align:center; margin:24px 0;">
+  <label for="autoDeleteDay">Day:</label>
+  <select id="autoDeleteDay" style="margin-right:12px;">
+    <option value="0">Sunday</option>
+    <option value="1">Monday</option>
+    <option value="2">Tuesday</option>
+    <option value="3">Wednesday</option>
+    <option value="4">Thursday</option>
+    <option value="5">Friday</option>
+    <option value="6">Saturday</option>
+  </select>
+  <label for="autoDeleteHour">Hour:</label>
+  <input type="number" id="autoDeleteHour" min="0" max="23" value="1" style="width:60px;">
+</div>
+<div style="text-align:center; margin:24px 0;">
+  <label for="autoDeleteType">Delete:</label>
+  <select id="autoDeleteType" style="margin-left:12px;">
+    <option value="coins">Coins Only</option>
+    <option value="inventory">Inventory Only</option>
+    <option value="both">Coins & Inventory</option>
+  </select>
+</div>
+<div style="text-align:center; margin:12px 0;">
+  <span id="autoDeleteCountdown" style="color:#888; font-size:1.1em;">Next auto delete in: --</span>
+</div>
+<div style="display: flex; align-items: center; margin: 24px 0;">
+  <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
+  <span style="padding: 0 12px; color: #888; font-weight: bold;">Manage Data</span>
+  <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
+</div>
 
                 <div style="text-align:center; margin:24px 0;">
-                    <button id="deleteDataBtn" class="settingsBtn">Delete Coin & Inventory Data</button>
+                    <label for="manualDeleteType" style="margin-right:8px;">Delete:</label>
+                    <select id="manualDeleteType" style="margin-right:12px;">
+                      <option value="coins">Coins Only</option>
+                      <option value="inventory">Inventory Only</option>
+                      <option value="both">Coins & Inventory</option>
+                    </select>
+                    <button id="deleteDataBtn" class="settingsBtn">Delete Data</button>
                 </div>
+</div>
+
+
              
-            </div>
+
+
+                
+        </div>
             <!-- New To Do List Tab -->
             <div id="todoTab" class="tabContent" style="display:none;">
                 <h2 style="text-align:center;">To Do List</h2>
@@ -624,7 +689,7 @@ button:disabled {
                     </div>
                     <div id="activityList"></div>
                 </div>
-                <div id="customAlert" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #2ecc71; color: white; padding: 12px 24px; border-radius: 8px; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 9999; transition: opacity 0.3s; max-width: 90vw; text-align: center; word-break: break-word;"></div>
+              
             </div>
 
 
@@ -1005,11 +1070,11 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         // --- Stopwatch Timer ---
         function startStopwatch() {
 
-          if (SettingOne == true) {
+          if (SettingOne && coins >= goal) {
 
-            if (stopwatchInterval || coins >= goal) 
+      
               showCustomAlert("The goal is already achieved. Stopwatch paused automatically. Increase your goal or disable auto-pause in settings.", "error");
- 
+       
               return;
            
           }
@@ -1020,15 +1085,17 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('stopwatchStartBtn').disabled = true;
             document.getElementById('stopwatchPauseBtn').disabled = false;
             setTimerModeDisabled(true);
+
             stopwatchInterval = setInterval(() => {
                 if (SettingOne === true && coins >= goal) {
                     pauseStopwatch();
-                    // Use setTimeout to ensure alert is shown after UI updates
+
                     setTimeout(() => {
                         showCustomAlert("Goal reached! Stopwatch paused.", "success");
                     }, 10);
                     return;
                 }
+
                 stopwatchSeconds++;
                 updateStopwatchDisplay();
                 if (stopwatchSeconds % 60 === 0) {
@@ -1219,7 +1286,6 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
                 const col = document.createElement('div');
                 col.style.display = 'flex';
                 col.style.flexWrap = 'wrap';
-             
                 col.style.alignItems = 'center';
                 col.style.minWidth = '180px';
                 col.style.marginBottom = '12px';
@@ -1391,16 +1457,8 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             const savedGoal = localStorage.getItem('pomodoroGoal');
             goal = savedGoal ? parseInt(savedGoal) : 100;
             document.getElementById('goalInput').value = goal;
-            // Only reset coins and inventory at 01:00 on Sundays
-            if (isSunday() && lastReset !== today && hour >= 1) {
-                coins = 0;
-                ownedThemes = ["Classic"];
-                localStorage.setItem('pomodoroCoins', coins);
-                localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
-                localStorage.setItem('pomodoroLastReset', today);
-            } else {
                 coins = saved ? parseInt(saved) : 0;
-            }
+            
         }
         loadAllData();
         updateTimerDisplay();
@@ -1410,32 +1468,13 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         renderShop();
         renderInventory();
         selectTheme(selectedTheme);
-        
+        // --- Ensure To Do List is loaded on page load ---
+        loadTodoActivities();
+
         updateProgressBar();
         showTimerMode(getSelectedTimerMode());
 
-        // Settings logic
-        if (document.getElementById('deleteDataBtn')) {
-            document.getElementById('deleteDataBtn').addEventListener('click', function() {
 
-                const result = confirm('Are you sure you want to delete all coin and inventory data? This cannot be undone.');
-               if (!result) return;
-                coins = 0;
-                ownedThemes = ["Classic","Night"];
-                localStorage.setItem('pomodoroCoins', coins);
-                localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
-                updateCoinsDisplay();
-                renderInventory();
-                updateProgressBar();
-                
-  showCustomAlert("Coin and inventory data deleted!", "success");
-    selectTheme("Classic");
-  
-                renderShop(); // Fix: reload shop after data deletion
-          
-
-            });
-        }
         // Goal input change
         
         function SetGoal(NewGoal) {
@@ -1459,7 +1498,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         }
 
         // To Do List logic
-// ...existing code...
+
 // --- Single To Do List Container ---
 let todoActivities = [];
 function loadTodoActivities() {
@@ -1528,6 +1567,8 @@ function renderTodoActivities() {
         div.appendChild(goalbtn);
         list.appendChild(div);
     });
+    // Save todoActivities after rendering (in case of any changes)
+    saveTodoActivities();
 }
 function calculateCompletionTimeEstimate() {
     const totalTaskCoins = todoActivities.reduce((sum, task) => sum + task.price, 0);
@@ -1571,9 +1612,137 @@ document.getElementById('confirmActivityBtn').onclick = function() {
     modal.style.display = 'none';
     calculateCompletionTimeEstimate();
 };
-// Initial render
-loadTodoActivities();
-renderTodoActivities();
+
+// --- Auto Delete Countdown & Logic ---  
+let lastAutoDeleteRun = null;
+function updateAutoDeleteCountdown() {
+  const enable = document.getElementById('autoDeleteEnable').checked;
+  if (!enable) {
+    document.getElementById('autoDeleteCountdown').textContent = 'Next auto delete in: --';
+    return;
+  }
+  const now = new Date();
+  const targetDay = parseInt(document.getElementById('autoDeleteDay').value);
+  const targetHour = parseInt(document.getElementById('autoDeleteHour').value);
+  let daysAhead = (targetDay - now.getDay() + 7) % 7;
+  let nextDelete = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetHour, 0, 0, 0);
+  if (daysAhead === 0 && now.getHours() >= targetHour) {
+    daysAhead = 7;
+  }
+  nextDelete.setDate(nextDelete.getDate() + daysAhead);
+  const msLeft = nextDelete - now;
+  if (msLeft <= 0) {
+    document.getElementById('autoDeleteCountdown').textContent = 'Next auto delete in: <1 min';
+    // Only run auto delete once per scheduled time
+    const lastRun = localStorage.getItem('pomodoroLastAutoDeleteRun');
+    const nextDeleteKey = nextDelete.toISOString().slice(0,16); // YYYY-MM-DDTHH:MM
+    if (lastRun !== nextDeleteKey) {
+      const type = document.getElementById('autoDeleteType').value;
+      DeleteData(type);
+      localStorage.setItem('pomodoroLastAutoDeleteRun', nextDeleteKey);
+    }
+    return;
+  }
+  const totalMinutes = Math.floor(msLeft / 60000);
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+  let label = 'Next auto delete in: ';
+  if (days > 0) label += days + 'd ';
+  if (hours > 0) label += hours + 'h ';
+  label += minutes + 'm';
+  document.getElementById('autoDeleteCountdown').textContent = label;
+}
+setInterval(updateAutoDeleteCountdown, 10000);
+document.getElementById('autoDeleteEnable').addEventListener('change', updateAutoDeleteCountdown);
+document.getElementById('autoDeleteDay').addEventListener('change', updateAutoDeleteCountdown);
+document.getElementById('autoDeleteHour').addEventListener('change', updateAutoDeleteCountdown);
+updateAutoDeleteCountdown();
+
+// --- Auto Delete Logic ---  
+
+function DeleteData(datatype) {
+
+
+  // Clear the specified data type
+     localStorage.setItem('pomodoroLastReset', today);
+   if (datatype === 'coins') {
+        coins = 0;
+        saveCoins();
+        updateCoinsDisplay();
+        updateProgressBar();
+        showCustomAlert('Coin data deleted!', 'success');
+        
+      } else if (datatype === 'inventory') {
+        ownedThemes = ['Classic','Night'];
+        localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
+        renderInventory();
+        showCustomAlert('Inventory data deleted!', 'success');
+
+ 
+
+      } else {
+        coins = 0;
+        saveCoins();
+        updateCoinsDisplay();
+        updateProgressBar();
+        ownedThemes = ['Classic','Night'];
+        localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
+        renderInventory();
+        showCustomAlert('Coin and inventory data deleted!', 'success');
+      }
+        renderShop(); // reload shop after data deletion
+
+}
+
+// --- Manual Delete Button Logic ---
+if (document.getElementById('deleteDataBtn')) {
+    document.getElementById('deleteDataBtn').addEventListener('click', function() {
+      const type = document.getElementById('manualDeleteType').value;
+
+  if (confirm("Are you sure you want to delete " + type + " data? This cannot be undone.")) {
+  // Kullanıcı "Tamam" dedi
+  console.log("Confirmed");
+   DeleteData(type);
+
+} else {
+  // Kullanıcı "İptal" dedi
+  console.log("Cancelled by user.");
+  
+
+}
+  
+    });
+}
+
+// --- Save & Load Settings ---
+function saveSettings() {
+  localStorage.setItem('pomodoroAutoDeleteEnable', document.getElementById('autoDeleteEnable').checked ? '1' : '0');
+  localStorage.setItem('pomodoroAutoDeleteDay', document.getElementById('autoDeleteDay').value);
+  localStorage.setItem('pomodoroAutoDeleteHour', document.getElementById('autoDeleteHour').value);
+  localStorage.setItem('pomodoroAutoDeleteType', document.getElementById('autoDeleteType').value);
+  localStorage.setItem('pomodoroManualDeleteType', document.getElementById('manualDeleteType').value);
+  localStorage.setItem('pomodoroSettingOne', document.getElementById('SettingOne').checked ? '1' : '0');
+  localStorage.setItem('pomodoroAutoStartBreak', document.getElementById('AutoStartBreak').checked ? '1' : '0');
+  localStorage.setItem('pomodoroAutoStartStudy', document.getElementById('AutoStartStudy').checked ? '1' : '0');
+}
+function loadSettings() {
+  document.getElementById('autoDeleteEnable').checked = localStorage.getItem('pomodoroAutoDeleteEnable') === '1';
+  if (localStorage.getItem('pomodoroAutoDeleteDay')) document.getElementById('autoDeleteDay').value = localStorage.getItem('pomodoroAutoDeleteDay');
+  if (localStorage.getItem('pomodoroAutoDeleteHour')) document.getElementById('autoDeleteHour').value = localStorage.getItem('pomodoroAutoDeleteHour');
+  if (localStorage.getItem('pomodoroAutoDeleteType')) document.getElementById('autoDeleteType').value = localStorage.getItem('pomodoroAutoDeleteType');
+  if (localStorage.getItem('pomodoroManualDeleteType')) document.getElementById('manualDeleteType').value = localStorage.getItem('pomodoroManualDeleteType');
+  document.getElementById('SettingOne').checked = localStorage.getItem('pomodoroSettingOne') === '1';
+  document.getElementById('AutoStartBreak').checked = localStorage.getItem('pomodoroAutoStartBreak') === '1';
+  document.getElementById('AutoStartStudy').checked = localStorage.getItem('pomodoroAutoStartStudy') === '1';
+}
+// Attach saveSettings to all relevant controls
+['autoDeleteEnable','autoDeleteDay','autoDeleteHour','autoDeleteType','manualDeleteType','SettingOne','AutoStartBreak','AutoStartStudy'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('change', saveSettings);
+});
+loadSettings();
+updateAutoDeleteCountdown();
     </script>
 </body>
 </html>
