@@ -228,11 +228,12 @@ button:disabled {
   color: #d35400;
   border: none;
   padding: 0.5em 1.5em;
-  margin: 0.125em 0.25em 1em 0.25em;
+  margin: 0.4em 0.25em 1em 0.4em;
   border-radius: 0.25em;
   font-size: 1em;
   cursor: pointer;
   max-width: 100%;
+  
 }
 .tabBtn.active {
   background: #d35400;
@@ -643,6 +644,9 @@ button:disabled {
   </select>
   <label for="autoDeleteHour">Hour:</label>
   <input type="number" id="autoDeleteHour" min="0" max="23" value="1" style="width:60px;">
+  <label for="autoDeleteMinute">Minute:</label>
+  <input type="number" id="autoDeleteMinute" min="0" max="59" value="0" style="width:60px;">
+
 </div>
 <div style="text-align:center; margin:24px 0;">
   <label for="autoDeleteType">Delete:</label>
@@ -714,15 +718,10 @@ button:disabled {
     <script>
 
 
-//--- Settings variables ---
-let SettingOne = false;
-const toggle = document.getElementById('SettingOne');
-if (toggle) {
-    toggle.addEventListener('change', function () {
-        SettingOne = toggle.checked;
-        console.log("SettingOne State:", SettingOne ? "Active" : "Inactive");
-    });
-}
+// --- Main JavaScript Logic ---
+
+
+
 
 
         // Pomodoro logic - Three Timer Modes
@@ -748,28 +747,17 @@ function getTodayString() {
     return now.getFullYear() + '-' + (now.getMonth()+1).toString().padStart(2,'0') + '-' + now.getDate().toString().padStart(2,'0');
 }
 
-function isSunday() {
-    // Returns true if today is Sunday
-    return new Date().getDay() === 0;
-}
 
-        function getCurrentHour() {
+
+function getCurrentHour() {
             return new Date().getHours();
-        }
+}
 
 function loadCoins() {
     const saved = localStorage.getItem('pomodoroCoins');
-    const lastReset = localStorage.getItem('pomodoroLastReset');
-    const today = getTodayString();
-    const hour = getCurrentHour();
-    // Only reset coins at 01:00 on Sundays
-    if (isSunday() && lastReset !== today && hour >= 1) {
-        coins = 0;
-        localStorage.setItem('pomodoroCoins', coins);
-        localStorage.setItem('pomodoroLastReset', today);
-    } else {
+
         coins = saved ? parseInt(saved) : 0;
-    }
+    updateCoinsDisplay();
 }
 
         function saveCoins() {
@@ -789,22 +777,7 @@ function loadCoins() {
             updateCoinsDisplay();
         }
 
-// Bonus: interval checker to reset coins at 1:00 AM on Sundays if page is open
-setInterval(() => {
-    const today = getTodayString();
-    const hour = getCurrentHour();
-    const lastReset = localStorage.getItem('pomodoroLastReset');
-    if (isSunday() && lastReset !== today && hour >= 1) {
-        coins = 0;
-        ownedThemes = ["Classic"];
-        localStorage.setItem('pomodoroCoins', coins);
-        localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
-        localStorage.setItem('pomodoroLastReset', today);
-        updateCoinsDisplay();
-        renderInventory();
-        updateProgressBar();
-    }
-}, 60000); // check every minute
+
 
         // --- End Persistent Coin Logic ---
 
@@ -917,16 +890,22 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             const seconds = timer % 60;
             document.getElementById('timer').textContent =
                 `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            localStorage.setItem('pomodoroTimer', timer);
+            console.log("Timer saved to localStorage:", timer);
         }
         function updateBreakTimerDisplay() {
             const minutes = Math.floor(breakTimer / 60);
             const seconds = breakTimer % 60;
             document.getElementById('breakTimer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+   
+            localStorage.setItem('breakTimer', breakTimer);
         }
         function updateStopwatchDisplay() {
             const minutes = Math.floor(stopwatchSeconds / 60);
             const seconds = stopwatchSeconds % 60;
             document.getElementById('stopwatchTimer').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+             localStorage.setItem('swTimer', stopwatchSeconds);
         }
         function updateProgressBar() {
             let percent = Math.min(100, Math.floor((coins / goal) * 100));
@@ -993,18 +972,21 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
                     }
                     updateTimerDisplay();
                     calculateCompletionTimeEstimate();
-                } else {
-                    clearInterval(interval);
-                    interval = null;
+                } else {          
                     document.getElementById('startBtn').disabled = false;
                     document.getElementById('pauseBtn').disabled = true;
-                    // Auto-switch to break mode if break is enabled
-                    if (document.getElementById('breakTime')) {
+                    // Auto-switch to break mode if AutoStartBreak is enabled
+                    if (document.getElementById('AutoStartBreak')?.checked) {
+                        clearInterval(interval);
+                        interval = null;
                         document.getElementById('breakMode').checked = true;
                         showTimerMode('break');
                         resetBreakTimer();
                         startBreakTimer();          
                         showCustomAlert("Study session complete! Time for a break.", "info");
+                    } else {
+                        
+                        pauseTimer();
                     }
                 }
             }, 1000);
@@ -1037,16 +1019,22 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
                     breakTimer--;
                     updateBreakTimerDisplay();
                 } else {
-                    clearInterval(breakInterval);
-                    breakInterval = null;
+                   
                     document.getElementById('breakStartBtn').disabled = false;
                     document.getElementById('breakPauseBtn').disabled = true;
-                     if (document.getElementById('timer')) {
+                    // Auto-switch to study mode if AutoStartStudy is enabled
+                     if (document.getElementById('AutoStartStudy')?.checked) {
+                        clearInterval(breakInterval);
+                        breakInterval = null;
                         document.getElementById('studyMode').checked = true;
                         showTimerMode('study');
                         resetTimer();
                         startTimer();         
                         showCustomAlert("Break session complete! Study time!", "info");
+                    } else {
+                      pauseBreakTimer();
+                    
+
                     }
                 }
             }, 1000);
@@ -1070,7 +1058,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         // --- Stopwatch Timer ---
         function startStopwatch() {
 
-          if (SettingOne && coins >= goal) {
+          if (document.getElementById('SettingOne')?.checked && coins >= goal) {
 
       
               showCustomAlert("The goal is already achieved. Stopwatch paused automatically. Increase your goal or disable auto-pause in settings.", "error");
@@ -1087,7 +1075,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             setTimerModeDisabled(true);
 
             stopwatchInterval = setInterval(() => {
-                if (SettingOne === true && coins >= goal) {
+                if (document.getElementById('SettingOne')?.checked && coins >= goal) {
                     pauseStopwatch();
 
                     setTimeout(() => {
@@ -1133,20 +1121,68 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         document.getElementById('startBtn').addEventListener('click', startTimer);
         document.getElementById('pauseBtn').addEventListener('click', pauseTimer);
         document.getElementById('resetBtn').addEventListener('click', resetTimer);
-        document.getElementById('pomodoroTime').addEventListener('change', function() {
+         document.getElementById('pomodoroTime').addEventListener('change', function() {
+           localStorage.setItem('pomodoroDuration', this.value);
             resetTimer();
         });
+        // Load saved pomodoro duration from localStorage
+        const savedPomodoroDuration = localStorage.getItem('pomodoroDuration');
+        if (savedPomodoroDuration) {
+            document.getElementById('pomodoroTime').value = savedPomodoroDuration;
+            pomodoroDuration = parseInt(savedPomodoroDuration);
+            lastMinute = pomodoroDuration;
+
+          
+        }
+        if (localStorage.getItem('pomodoroTimer')) {
+            timer = parseInt(localStorage.getItem('pomodoroTimer'));
+            console.log("Loaded timer from localStorage:", timer);
+             updateTimerDisplay();
+         } else {
+            timer = pomodoroDuration * 60;
+             updateTimerDisplay();
+         }
+           
         // Break Timer buttons
         document.getElementById('breakStartBtn').addEventListener('click', startBreakTimer);
         document.getElementById('breakPauseBtn').addEventListener('click', pauseBreakTimer);
         document.getElementById('breakResetBtn').addEventListener('click', resetBreakTimer);
         document.getElementById('breakTime').addEventListener('change', function() {
+              localStorage.setItem('breakDuration', this.value);
             resetBreakTimer();
         });
+        // Load saved break duration from localStorage
+        const savedBreakDuration = localStorage.getItem('breakDuration');
+        if (savedBreakDuration) {
+            document.getElementById('breakTime').value = savedBreakDuration;
+            breakDuration = parseInt(savedBreakDuration);
+     
+          
+        }
+        if (localStorage.getItem('breakTimer')) {
+            breakTimer = parseInt(localStorage.getItem('breakTimer'));
+            console.log("Loaded breakTimer from localStorage:", breakTimer);
+           updateBreakTimerDisplay()
+           } else {
+            breakTimer = breakDuration * 60;
+           updateBreakTimerDisplay()
+        }
+          
+
         // Stopwatch buttons
         document.getElementById('stopwatchStartBtn').addEventListener('click', startStopwatch);
         document.getElementById('stopwatchPauseBtn').addEventListener('click', pauseStopwatch);
         document.getElementById('stopwatchResetBtn').addEventListener('click', resetStopwatch);
+        // Load saved stopwatch seconds from localStorage
+        const savedStopwatchSeconds = localStorage.getItem('swTimer');
+        if (savedStopwatchSeconds) {
+            stopwatchSeconds = parseInt(savedStopwatchSeconds);
+            console.log("Loaded stopwatch seconds from localStorage:", stopwatchSeconds);
+            updateStopwatchDisplay();
+        } else {
+            stopwatchSeconds = 0; // Default to 0 if not found
+            updateStopwatchDisplay();
+        }
              // Update completion estimate on activity list change
 
 // Removed buggy calculateCompletionTimeEstimate function.
@@ -1469,7 +1505,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         renderInventory();
         selectTheme(selectedTheme);
         // --- Ensure To Do List is loaded on page load ---
-        loadTodoActivities();
+        
 
         updateProgressBar();
         showTimerMode(getSelectedTimerMode());
@@ -1488,9 +1524,6 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
 
 
         }
-
-
-
         if (document.getElementById('goalInput')) {
             document.getElementById('goalInput').addEventListener('change', function() {
            SetGoal(this.value);
@@ -1499,12 +1532,15 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
 
         // To Do List logic
 
+
 // --- Single To Do List Container ---
 let todoActivities = [];
+
 function loadTodoActivities() {
     const saved = localStorage.getItem('pomodoroActivities');
     todoActivities = saved ? JSON.parse(saved) : [];
     calculateCompletionTimeEstimate();
+    renderTodoActivities();
 }
 function saveTodoActivities() {
     localStorage.setItem('pomodoroActivities', JSON.stringify(todoActivities));
@@ -1570,6 +1606,9 @@ function renderTodoActivities() {
     // Save todoActivities after rendering (in case of any changes)
     saveTodoActivities();
 }
+loadTodoActivities();
+
+
 function calculateCompletionTimeEstimate() {
     const totalTaskCoins = todoActivities.reduce((sum, task) => sum + task.price, 0);
     const netCoinsNeeded = totalTaskCoins - coins;
@@ -1615,32 +1654,67 @@ document.getElementById('confirmActivityBtn').onclick = function() {
 
 // --- Auto Delete Countdown & Logic ---  
 let lastAutoDeleteRun = null;
+
+
 function updateAutoDeleteCountdown() {
+
   const enable = document.getElementById('autoDeleteEnable').checked;
-  if (!enable) {
-    document.getElementById('autoDeleteCountdown').textContent = 'Next auto delete in: --';
-    return;
-  }
+ 
+
   const now = new Date();
   const targetDay = parseInt(document.getElementById('autoDeleteDay').value);
   const targetHour = parseInt(document.getElementById('autoDeleteHour').value);
+  const targetMinute = parseInt(document.getElementById('autoDeleteMinute').value);
   let daysAhead = (targetDay - now.getDay() + 7) % 7;
-  let nextDelete = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetHour, 0, 0, 0);
-  if (daysAhead === 0 && now.getHours() >= targetHour) {
-    daysAhead = 7;
+  let nextDelete = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetHour, targetMinute, 0, 0);
+ // --- FIX: If today is the target day and the target time is still ahead, use today ---
+  if (daysAhead === 0) {
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    const targetMinutes = targetHour * 60 + targetMinute;
+    if (nowMinutes < targetMinutes) {
+      // Target time is still ahead today, keep daysAhead = 0
+      console.log(targetMinutes-nowMinutes);
+    
+
+
+  
+
+    } else if (nowMinutes === targetMinutes) {
+      // Target time is exactly now, keep daysAhead = 0
+      
+    } else {
+      // Target time has passed today, schedule for next week
+      daysAhead = 7;
+    }
   }
   nextDelete.setDate(nextDelete.getDate() + daysAhead);
   const msLeft = nextDelete - now;
+
+
   if (msLeft <= 0) {
-    document.getElementById('autoDeleteCountdown').textContent = 'Next auto delete in: <1 min';
+
+     if (!enable) {
+    document.getElementById('autoDeleteCountdown').textContent = 'Next auto delete in: Now, Disabled';
+    return;
+  }
+ 
     // Only run auto delete once per scheduled time
     const lastRun = localStorage.getItem('pomodoroLastAutoDeleteRun');
     const nextDeleteKey = nextDelete.toISOString().slice(0,16); // YYYY-MM-DDTHH:MM
     if (lastRun !== nextDeleteKey) {
       const type = document.getElementById('autoDeleteType').value;
+      console.log(`Running auto delete for type: ${type}`);
       DeleteData(type);
       localStorage.setItem('pomodoroLastAutoDeleteRun', nextDeleteKey);
     }
+
+       document.getElementById('autoDeleteCountdown').textContent = 'Deleted!';
+    return;
+
+
+  } else if  (msLeft <= 60000) {
+    // Less than 1 minute left, show countdown in seconds
+      document.getElementById('autoDeleteCountdown').textContent = 'Next auto delete in: <1 min';
     return;
   }
   const totalMinutes = Math.floor(msLeft / 60000);
@@ -1654,9 +1728,19 @@ function updateAutoDeleteCountdown() {
   document.getElementById('autoDeleteCountdown').textContent = label;
 }
 setInterval(updateAutoDeleteCountdown, 10000);
-document.getElementById('autoDeleteEnable').addEventListener('change', updateAutoDeleteCountdown);
+
+function AutoDeleteProtector() {
+
+  document.getElementById('autoDeleteEnable').checked = false;
+}
+
 document.getElementById('autoDeleteDay').addEventListener('change', updateAutoDeleteCountdown);
 document.getElementById('autoDeleteHour').addEventListener('change', updateAutoDeleteCountdown);
+document.getElementById('autoDeleteMinute').addEventListener('change', updateAutoDeleteCountdown);
+document.getElementById('autoDeleteDay').addEventListener('change', AutoDeleteProtector);
+document.getElementById('autoDeleteHour').addEventListener('change', AutoDeleteProtector);
+document.getElementById('autoDeleteMinute').addEventListener('change', AutoDeleteProtector);
+
 updateAutoDeleteCountdown();
 
 // --- Auto Delete Logic ---  
@@ -1665,7 +1749,7 @@ function DeleteData(datatype) {
 
 
   // Clear the specified data type
-     localStorage.setItem('pomodoroLastReset', today);
+   
    if (datatype === 'coins') {
         coins = 0;
         saveCoins();
@@ -1720,6 +1804,7 @@ function saveSettings() {
   localStorage.setItem('pomodoroAutoDeleteEnable', document.getElementById('autoDeleteEnable').checked ? '1' : '0');
   localStorage.setItem('pomodoroAutoDeleteDay', document.getElementById('autoDeleteDay').value);
   localStorage.setItem('pomodoroAutoDeleteHour', document.getElementById('autoDeleteHour').value);
+  localStorage.setItem('pomodoroAutoDeleteMinute', document.getElementById('autoDeleteMinute').value);
   localStorage.setItem('pomodoroAutoDeleteType', document.getElementById('autoDeleteType').value);
   localStorage.setItem('pomodoroManualDeleteType', document.getElementById('manualDeleteType').value);
   localStorage.setItem('pomodoroSettingOne', document.getElementById('SettingOne').checked ? '1' : '0');
@@ -1730,6 +1815,7 @@ function loadSettings() {
   document.getElementById('autoDeleteEnable').checked = localStorage.getItem('pomodoroAutoDeleteEnable') === '1';
   if (localStorage.getItem('pomodoroAutoDeleteDay')) document.getElementById('autoDeleteDay').value = localStorage.getItem('pomodoroAutoDeleteDay');
   if (localStorage.getItem('pomodoroAutoDeleteHour')) document.getElementById('autoDeleteHour').value = localStorage.getItem('pomodoroAutoDeleteHour');
+  if (localStorage.getItem('pomodoroAutoDeleteMinute')) document.getElementById('autoDeleteMinute').value = localStorage.getItem('pomodoroAutoDeleteMinute');
   if (localStorage.getItem('pomodoroAutoDeleteType')) document.getElementById('autoDeleteType').value = localStorage.getItem('pomodoroAutoDeleteType');
   if (localStorage.getItem('pomodoroManualDeleteType')) document.getElementById('manualDeleteType').value = localStorage.getItem('pomodoroManualDeleteType');
   document.getElementById('SettingOne').checked = localStorage.getItem('pomodoroSettingOne') === '1';
@@ -1743,6 +1829,15 @@ function loadSettings() {
 });
 loadSettings();
 updateAutoDeleteCountdown();
+
+// window.addEventListener("beforeunload", function (e) {
+  // Mesajı göster
+  //e.preventDefault(); // Bazı tarayıcılarda gerekli
+  //e.returnValue = ''; // Chrome gibi modern tarayıcılar için bu satır şart
+  
+  // Not: return değeri kullanıcıya gösterilmez, sadece uyarı çıkmasını sağlar.
+//});
+
     </script>
 </body>
 </html>
