@@ -498,7 +498,7 @@ button:disabled {
 <!-- Divider Line -->
 
 
-    <div class="container" id = "mainApp">
+<div class="container" id = "mainApp">
     <h1 id="mainTitle" style="display:none;"></h1>
     <div id="customAlert" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #2ecc71; color: white; padding: 12px 24px; border-radius: 8px; font-size: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); z-index: 9999; transition: opacity 0.3s; max-width: 90vw; text-align: center; word-break: break-word;"></div>
         <div class="tabContents">
@@ -587,8 +587,15 @@ button:disabled {
             </div>
             <div id="settingsTab" class="tabContent" style="display:none;">
                 <h2 style="text-align:center;" id="settingsTitle">Settings</h2>
-
-     <div style="display: flex; align-items: center; margin: 24px 0;">
+                        
+                  <!-- Settings Mode-->
+           <div style="text-align:center; margin-bottom:16px;">
+  <button id="settingsPomodoroTabBtn" class="tabBtn active">Pomodoro</button>
+  <button id="settingsDataTabBtn" class="tabBtn">Data</button>
+</div>
+                <!-- SettingTab POMODORO -->
+                <div id="SettingTabPomodoro"> 
+                   <div style="display: flex; align-items: center; margin: 24px 0;">
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
   <span style="padding: 0 12px; color: #888; font-weight: bold;">Pomodoro</span>
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
@@ -618,6 +625,14 @@ button:disabled {
   <span class="label-text">Auto start study.</span>
 </label>
 
+
+
+
+               
+</div>
+                   <!-- SettingTab DATA -->
+<div id="SettingTabData">
+                  
 <div style="display: flex; align-items: center; margin: 24px 0;">
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
   <span style="padding: 0 12px; color: #888; font-weight: bold;">Auto Data Delete</span>
@@ -665,15 +680,45 @@ button:disabled {
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
 </div>
 
-                <div style="text-align:center; margin:24px 0;">
+<div style="text-align:center; margin:24px 0;">
                     <label for="manualDeleteType" style="margin-right:8px;">Delete:</label>
                     <select id="manualDeleteType" style="margin-right:12px;">
                       <option value="coins">Coins Only</option>
                       <option value="inventory">Inventory Only</option>
                       <option value="both">Coins & Inventory</option>
                     </select>
-                    <button id="deleteDataBtn" class="settingsBtn">Delete Data</button>
+                    <button id="deleteDataBtn" class="settingsBtn">Confirm</button>
+</div>
+
+<div style="text-align:center; margin:24px 0;">
+                    <label for="changeDataType" style="margin-right:8px;">Change:</label>
+                    <select id="changeDataType" style="margin-right:12px;">
+                      <option value="coins">Coins</option>
+                      <option value="crystal">Crystal</option>
+                    </select>
+                    <input type="number" id="changedata" style="width:120px; margin-right:12px;">
+                    <button id="changeDataBtn" class="settingsBtn">Confirm</button>
+</div>
+<!-- PIN Setting -->
+ <div style="display: flex; align-items: center; margin: 24px 0;">
+  <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
+  <span style="padding: 0 12px; color: #888; font-weight: bold;">PIN</span>
+  <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
+</div>
+
+
+<div style="text-align:center; margin:24px 0;">
+  <label for="pinSettingInput">Set/Change PIN:</label>
+  <input type="password" id="pinSettingInput" style="width:120px; margin-right:12px;">
+  <button id="setPinBtn" class="settingsBtn">Save PIN</button>
+  <button id="clearPinBtn" class="settingsBtn" style="background:#ccc; color:#222;">Clear PIN</button>
+  <div id="pinSettingMsg" style="color:#888; margin-top:8px;"></div>
+</div>
+
+
+
                 </div>
+
 </div>
 
 
@@ -698,9 +743,11 @@ button:disabled {
 
 
         </div>
-    </div>
+</div>
 
-    <!-- Pomodoro -->
+
+
+  <!-- Pomodoro -->
 <div id="activityModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:1000; justify-content:center; align-items:center;">
     <div style="background:#fff; padding:24px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.2); min-width:300px; max-width:90vw; margin:auto;">
         <h3 style="margin-top:0;">Add Activity</h3>
@@ -714,6 +761,19 @@ button:disabled {
         </div>
     </div>
 </div>
+<!-- PIN -->
+<div id="pinModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:2000; justify-content:center; align-items:center;">
+  <div style="background:#fff; padding:24px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.2); min-width:300px; max-width:90vw; margin:auto; text-align:center;">
+    <h3>Enter PIN</h3>
+    <input type="password" id="pinInput" style="width:80%; margin-bottom:16px;">
+    <div>
+      <button id="pinConfirmBtn" class="settingsBtn">Confirm</button>
+      <button id="pinCancelBtn" class="settingsBtn" style="background:#ccc; color:#222;">Cancel</button>
+    </div>
+    <div id="pinError" style="color:#e74c3c; margin-top:12px; display:none;">Incorrect PIN.</div>
+  </div>
+</div>
+
 
     <script>
 
@@ -721,7 +781,7 @@ button:disabled {
 // --- Main JavaScript Logic ---
 
 
-
+       
 
 
         // Pomodoro logic - Three Timer Modes
@@ -739,6 +799,31 @@ button:disabled {
         let stopwatchInterval = null;
         let stopwatchRunning = false;
 
+        // --- Get password protected settings ---
+function getPIN() {
+    const savedPIN = localStorage.getItem('pomodoroPIN');
+    if (!savedPIN) {
+        // No PIN set, allow access
+        return true;
+    }
+    // Ask user for PIN using browser prompt
+    const enteredPIN = prompt("Enter your PIN:");
+    if (enteredPIN === savedPIN) {
+        return true;
+    } else {
+        alert("Incorrect PIN!");
+        return false;
+    }
+}
+function updateClearPinBtnState() {
+    const hasPin = !!localStorage.getItem('pomodoroPIN');
+    document.getElementById('clearPinBtn').disabled = !hasPin;
+    document.getElementById('setPinBtn').disabled = hasPin;
+}
+
+
+// Run on page load
+updateClearPinBtnState();
         // --- Persistent Coin Logic ---
         // Save/load coins and last reset date from localStorage
 function getTodayString() {
@@ -958,6 +1043,11 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         }
         // --- Study Timer ---
         function startTimer() {
+          
+             let IfSuccess = getPIN();
+             if (!IfSuccess) return;
+
+
             if (interval) return;
             document.getElementById('startBtn').disabled = true;
             document.getElementById('pauseBtn').disabled = false;
@@ -1102,11 +1192,68 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             }
         }
         function resetStopwatch() {
+
+
             pauseStopwatch();
             stopwatchSeconds = 0;
             updateStopwatchDisplay();
             document.getElementById('stopwatchPauseBtn').disabled = true;
         }
+        // --- PIN Logic ---
+        document.getElementById('setPinBtn').onclick = function() {
+         
+    const pinInput = document.getElementById('pinSettingInput').value.trim();
+    const msg = document.getElementById('pinSettingMsg');
+    if (!pinInput) {
+        msg.textContent = "Please enter a PIN.";
+        msg.style.color = "#e74c3c";
+           setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 2 saniye
+        return;
+    }
+    localStorage.setItem('pomodoroPIN', pinInput);
+    msg.textContent = "PIN saved!";
+    msg.style.color = "#2ecc71";
+    document.getElementById('pinSettingInput').value = "";
+         setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 2 saniye
+     updateClearPinBtnState();
+};
+
+        document.getElementById('clearPinBtn').onclick = function() {
+   const pinInput = document.getElementById('pinSettingInput').value.trim();
+       const msg = document.getElementById('pinSettingMsg');
+ const savedPIN = localStorage.getItem('pomodoroPIN');
+ if (!pinInput )  {
+    msg.textContent = "Please enter a PIN.";
+        msg.style.color = "#e74c3c";
+         setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 2 saniye
+        return;
+ }
+  if (pinInput !== savedPIN) {
+        msg.textContent = "Incorrect PIN.";
+        msg.style.color = "#e74c3c";
+         setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 2 saniye
+        return;
+  }
+
+
+    localStorage.removeItem('pomodoroPIN');
+    document.getElementById('pinSettingMsg').textContent = "PIN cleared!";
+    document.getElementById('pinSettingMsg').style.color = "#3498db";
+    document.getElementById('pinSettingInput').value = "";
+         setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 2 saniye
+       updateClearPinBtnState();
+};
+
         // --- Event Listeners for Timer Modes ---
         document.getElementById('studyMode').addEventListener('change', function() {
             showTimerMode('study');
@@ -1234,6 +1381,23 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('settingsTabBtn').classList.remove('active');
           
         });
+        //Settings tab
+  document.getElementById('settingsPomodoroTabBtn').onclick = function() {
+  document.getElementById('SettingTabPomodoro').style.display = 'block';
+  document.getElementById('SettingTabData').style.display = 'none';
+  this.classList.add('active');
+  document.getElementById('settingsDataTabBtn').classList.remove('active');
+};
+  document.getElementById('settingsDataTabBtn').onclick = function() {
+
+let IfSuccess = getPIN();
+if (!IfSuccess) return;
+
+  document.getElementById('SettingTabPomodoro').style.display = 'none';
+  document.getElementById('SettingTabData').style.display = 'block';
+  this.classList.add('active');
+  document.getElementById('settingsPomodoroTabBtn').classList.remove('active');
+}; 
 
         // Shop logic
         function renderShop() {
@@ -1241,7 +1405,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             shopDiv.innerHTML = '';
             // Group themes by bundle
             const bundleMap = {};
-            themes.forEach(theme => {
+            themes.forEach (theme => {
                 if (!ownedThemes.includes(theme.name)) {
                     const bundle = theme.bundle || 'Other';
                     if (!bundleMap[bundle]) bundleMap[bundle] = [];
@@ -1421,12 +1585,25 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('todoTabBtn').style.color = theme.text;
             document.getElementById('addActivityBtn').style.background = theme.btn;
             document.getElementById('addActivityBtn').style.color = theme.text;
-
+                      //Settings tab buttons
+            document.getElementById('settingsPomodoroTabBtn').style.background = theme.btn;
+            document.getElementById('settingsPomodoroTabBtn').style.color = theme.text;
+            document.getElementById('settingsDataTabBtn').style.background = theme.btn;
+            document.getElementById('settingsDataTabBtn').style.color = theme.text;
             // Style settings wipe button
             if (document.getElementById('deleteDataBtn')) {
                 document.getElementById('deleteDataBtn').style.background = theme.btn;
                 document.getElementById('deleteDataBtn').style.color = theme.text;
             }
+            document.getElementById('changeDataBtn').style.background = theme.bg;
+            document.getElementById('changeDataBtn').style.color = theme.text;
+            // PIN setting buttons
+            document.getElementById('setPinBtn').style.background = theme.btn;
+            document.getElementById('setPinBtn').style.color = theme.text;
+            document.getElementById('clearPinBtn').style.background = theme.btn;
+            document.getElementById('clearPinBtn').style.color = theme.text;
+          
+        
             // Style progress bar
             if (document.getElementById('progressBar')) {
                 document.getElementById('progressBar').style.background = theme.btn;
@@ -1486,6 +1663,8 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             const lastReset = localStorage.getItem('pomodoroLastReset');
             const today = getTodayString();
             const hour = getCurrentHour();
+            // Load Gems
+            const savedgems = localStorage.getItem('pomodoroCoins');
             // Load inventory
             const inv = localStorage.getItem('pomodoroInventory');
             ownedThemes = inv ? JSON.parse(inv) : ["Classic"];
@@ -1531,6 +1710,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         }
 
         // To Do List logic
+
 
 
 // --- Single To Do List Container ---
@@ -1631,6 +1811,9 @@ function calculateCompletionTimeEstimate() {
 // Modal logic
 const modal = document.getElementById('activityModal');
 document.getElementById('addActivityBtn').onclick = function() {
+
+   
+
     modal.style.display = 'flex';
     document.getElementById('activityNameInput').value = '';
     document.getElementById('activityPriceInput').value = 10;
@@ -1657,6 +1840,7 @@ let lastAutoDeleteRun = null;
 
 
 function updateAutoDeleteCountdown() {
+
 
   const enable = document.getElementById('autoDeleteEnable').checked;
  
@@ -1799,6 +1983,8 @@ if (document.getElementById('deleteDataBtn')) {
     });
 }
 
+
+   
 // --- Save & Load Settings ---
 function saveSettings() {
   localStorage.setItem('pomodoroAutoDeleteEnable', document.getElementById('autoDeleteEnable').checked ? '1' : '0');
@@ -1838,6 +2024,13 @@ updateAutoDeleteCountdown();
   // Not: return değeri kullanıcıya gösterilmez, sadece uyarı çıkmasını sağlar.
 //});
 
+// Ensure only Pomodoro tab is visible on load
+window.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('SettingTabPomodoro').style.display = 'block';
+  document.getElementById('SettingTabData').style.display = 'none';
+  document.getElementById('settingsPomodoroTabBtn').classList.add('active');
+  document.getElementById('settingsDataTabBtn').classList.remove('active');
+});
     </script>
 </body>
 </html>
