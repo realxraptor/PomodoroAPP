@@ -43,6 +43,12 @@
   vertical-align: middle;
   margin-left: 4px;
 }
+.crystal-icon {
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+  margin-left: 4px;
+}
 /* Settings sliders */
 .switch {
   display: flex;
@@ -160,6 +166,10 @@ body {
   padding: 0;
   font-size: 1.1rem;
   transition: background 0.3s;
+  background-image: url("bg.jpg");
+  background-size: cover;   /* Crop gibi davranır */
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .container {
   max-width: 1500px;
@@ -188,6 +198,15 @@ h1 {
   font-size: 2.2em;
 }
 .coins {
+  font-size: 1.3em;
+  margin-bottom: 1em;
+  text-align: center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:24px;
+}
+.crystals {
   font-size: 1.3em;
   margin-bottom: 1em;
   text-align: center;
@@ -483,17 +502,18 @@ button:disabled {
 </body>
 <div id="topBar">
    <img src="./images/icon1.png" alt="Pomocoin" class="responsive-image">
-
-
-
   <span id="AppTitle"> Pomocoin </span>
+  <div id="navTabs">
+    <button class="tabBtn active" id="pomodoroTabBtn">Pomodoro</button>
+    <button class="tabBtn" id="shopTabBtn">Shop</button>
+    <button class="tabBtn" id="settingsTabBtn">Settings</button>
+    <button class="tabBtn" id="todoTabBtn">To Do List</button>
+  </div>
+  <div id="currencyIndicators" style="display:flex; align-items:center; gap:24px; position:absolute; right:32px; top:16px;">
+    <span id="coinCountTop">0</span>
+    <span id="crystalCountTop">0</span>
 
-    <div id="navTabs">
-        <button class="tabBtn active" id="pomodoroTabBtn">Pomodoro</button>
-        <button class="tabBtn" id="shopTabBtn">Shop</button>
-        <button class="tabBtn" id="settingsTabBtn">Settings</button>
-        <button class="tabBtn" id="todoTabBtn">To Do List</button>
-    </div>
+  </div>
 </div>
 <!-- Divider Line -->
 
@@ -504,12 +524,6 @@ button:disabled {
         <div class="tabContents">
             <div id="pomodoroTab" class="tabContent" style="display:block;">
                 <h2 id="CounterTitle" style="text-align:center; color:#0b0b0b;">Pomodoro</h2>
-                <div class="coins">
-            
-                  <span id="coinCount">0</span>
-                  <img src="./images/currencyimage.png" alt="Coin" class="coin-icon">  
-                </div>
-
 
                 <!-- Timer Mode Selector -->
                 <div style="text-align:center; margin-bottom:16px;">
@@ -578,7 +592,6 @@ button:disabled {
             </div>
             <div id="shopTab" class="tabContent" style="display:none;">
                           <h2 id="shopTitle" style="text-align:center; color:#d35400;">Shop</h2>
-                <div class="coins">Coins: <span id="coinCountShop">0</span></div>
       
                 <div id="themesShop" style="margin-bottom:24px;"></div>
                 <h3 style="text-align:center; color:#888;">Inventory</h3>
@@ -684,6 +697,7 @@ button:disabled {
                     <label for="manualDeleteType" style="margin-right:8px;">Delete:</label>
                     <select id="manualDeleteType" style="margin-right:12px;">
                       <option value="coins">Coins Only</option>
+                       <option value="crystals">Crystals Only</option>
                       <option value="inventory">Inventory Only</option>
                       <option value="both">Coins & Inventory</option>
                     </select>
@@ -691,14 +705,15 @@ button:disabled {
 </div>
 
 <div style="text-align:center; margin:24px 0;">
-                    <label for="changeDataType" style="margin-right:8px;">Change:</label>
-                    <select id="changeDataType" style="margin-right:12px;">
+                    <label for="changetext" style="margin-right:8px;">Change:</label>
+                    <select id="setCurrencyType" style="margin-right:12px;">
                       <option value="coins">Coins</option>
                       <option value="crystal">Crystal</option>
                     </select>
-                    <input type="number" id="changedata" style="width:120px; margin-right:12px;">
-                    <button id="changeDataBtn" class="settingsBtn">Confirm</button>
-</div>
+                     <input type="number" id="setCurrencyValue" min="0" max="23" value="1" style="width:60px;">
+                    <button id="setCurrencyBtn" class="currencyBtn">Confirm</button>
+                      <div id="setCurrencyMsg" style="color:#888; margin-top:8px;"></div>
+</div> 
 <!-- PIN Setting -->
  <div style="display: flex; align-items: center; margin: 24px 0;">
   <div style="flex: 1; height: 1px; background-color: #ccc;"></div>
@@ -730,7 +745,6 @@ button:disabled {
             <!-- New To Do List Tab -->
             <div id="todoTab" class="tabContent" style="display:none;">
                 <h2 style="text-align:center;">To Do List</h2>
-                <div class="coins">Coins: <span id="coinCountTDL">0</span></div>
                 <div id="todoListContainer" style="max-width:600px; margin:32px auto; background:#f8f8f8; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:32px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                         <span id="completionEstimate" style="color:#888; font-size:1.1em;">Estimated finish time: --:--</span>
@@ -747,7 +761,7 @@ button:disabled {
 
 
 
-  <!-- Pomodoro -->
+  <!-- TDL -->
 <div id="activityModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:1000; justify-content:center; align-items:center;">
     <div style="background:#fff; padding:24px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.2); min-width:300px; max-width:90vw; margin:auto;">
         <h3 style="margin-top:0;">Add Activity</h3>
@@ -761,7 +775,7 @@ button:disabled {
         </div>
     </div>
 </div>
-<!-- PIN -->
+<!-- PIN-->
 <div id="pinModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:2000; justify-content:center; align-items:center;">
   <div style="background:#fff; padding:24px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.2); min-width:300px; max-width:90vw; margin:auto; text-align:center;">
     <h3>Enter PIN</h3>
@@ -798,6 +812,8 @@ button:disabled {
         let stopwatchSeconds = 0;
         let stopwatchInterval = null;
         let stopwatchRunning = false;
+        // Crystals
+        let crystals = 0;
 
         // --- Get password protected settings ---
 function getPIN() {
@@ -838,31 +854,40 @@ function getCurrentHour() {
             return new Date().getHours();
 }
 
-function loadCoins() {
-    const saved = localStorage.getItem('pomodoroCoins');
 
-        coins = saved ? parseInt(saved) : 0;
-    updateCoinsDisplay();
-}
 
         function saveCoins() {
             localStorage.setItem('pomodoroCoins', coins);
         }
-
+        function saveCrystals() {
+            localStorage.setItem('pomodoroCrystals', crystals);
+        }
         function addCoins(amount) {
             coins += amount;
             saveCoins();
             updateCoinsDisplay();
             updateProgressBar();
         }
-
+      
         function subtractCoins(amount) {
             coins = Math.max(0, coins - amount);
             saveCoins();
             updateCoinsDisplay();
+            updateProgressBar();
         }
 
+         function addCrystals(amount) {
 
+            crystals += amount;
+            saveCrystals();
+            updateCrystalsDisplay();
+         
+        }
+        function subtractCrystals(amount) {
+            coins = Math.max(0, crystals - amount);
+            saveCrystals();
+            updateCrystalsDisplay();
+        }
 
         // --- End Persistent Coin Logic ---
 
@@ -908,7 +933,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             { name: "Night", bundle: "Starter", price: 0, bg: "#222", btn: "#34495e",Tb: "#4f4f4f ", text: "#fff" ,},
            
 
-            { name: "Monochrome", bundle: "Basic", price: 30, bg: "#f4f4f4", btn: "#f4f4f4",Tb: "#4f4f4f", text: "#222" ,},
+            { name: "Retro", bundle: "Basic", price: 30, bg: "#f4f4f4", btn: "#f44336",Tb: "#e6e6e6", text: "#222" ,},
             { name: "Coffee",bundle: "Basic", price: 30, bg: "#ffd9b6", btn: "#c09062 ",Tb: "#f0b883", text: "#222" ,},
 
 
@@ -948,9 +973,13 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             { name: "Amethyst", bundle: "Gemstone", price: 180, bg: "#E6D6F3", btn: "#6A4C93",Tb: "#B088CC", text: "#222" ,},
           { name: "Diamond", bundle: "Gemstone",price: 180, bg: "#F0F8FF", btn: "#8DA9C4",Tb: "#C8D8E4", text: "#222" ,},
           
-           
-
-    
+            {name: "Horizon", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Horizon.png", btn: "#2046A1",Tb: "#7D03FF", text: "#03164A" ,transparency: 0.3},
+            {name: "Saturn", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Saturn.jpeg", btn: "#EBC7F0",Tb: "#E387E8", text: "#5E1269" ,transparency: 0.3},
+            {name: "Circuit", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Circuit.jpeg", btn: "#381A89",Tb: "#252B99", text: "#0B0F38" ,transparency: 0.8},
+            {name: "Aurora", bundle: "Exclusive", price: 8, bg: "./ExclusiveThemes/bg_Aurora.jpeg", btn: "#34495e",Tb: "#4f4f4f ", text: "#A3F7BF" ,transparency: 0.1},
+            {name: "Warrior", bundle: "Exclusive", price: 8, bg: "./ExclusiveThemes/bg_Warrior.jpeg", btn: "#AB305A",Tb: "#5C3B5E", text: "#222" ,transparency: 0.25},
+             {name: "Zenith", bundle: "Exclusive", price: 8, bg: "./ExclusiveThemes/bg_Zenith.jpeg", btn: "#BDA644",Tb: "#e6e6e6", text: "#FAE073" ,transparency: 0.1},
+  
 
            
            
@@ -969,6 +998,167 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         let ownedThemes = ["Night", "Classic"]; // Default owned themes
         let selectedTheme = "Classic";
         let goal = 100;
+
+        // Select theme
+             function selectTheme(themeName) {
+          
+            selectedTheme = themeName;
+            const theme = themes.find(t => t.name === themeName);
+          //      const fontstyle = choosentheme.FS || "";
+
+          //Update top bar
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', theme.Tb);
+          //Update head
+
+   
+
+                   if (theme.bg.startsWith("#")) {
+        document.body.style.backgroundImage = "none";
+        document.body.style.backgroundColor = theme.bg;
+                  } 
+                  else {
+        document.body.style.backgroundColor = "transparent";
+        document.body.style.backgroundImage = `url(${theme.bg})`;
+        
+   
+        const transparency = theme.transparency || 0.3;
+        document.querySelector('.container').style.background = `rgba(255, 255, 255, ${transparency})`;
+       
+                  }
+            document.querySelector('.container').style.background = theme.bg;
+            document.getElementById('mainTitle').style.color = theme.title || theme.text;
+               document.getElementById('CounterTitle').style.color = theme.title || theme.text;
+            document.getElementById('shopTitle').style.color = theme.title || theme.text;
+            document.getElementById('settingsTitle').style.color = theme.title || theme.text;
+            document.querySelector('.container').style.color = theme.text;
+            document.getElementById('todoListContainer').style.background = theme.Tb;
+             
+            //Currency indicators
+            document.getElementById('coinCountTop').style.color = theme.text;
+            document.getElementById('crystalCountTop').style.color = theme.text;
+        
+            // Update only inventory themeBtn buttons (not shopBtn)
+            document.querySelectorAll('.themeBtn').forEach(btn => {
+                if (!btn.classList.contains('shopBtn')) {
+                    btn.style.background = theme.btn;
+                    btn.style.color = theme.text;
+                }
+            });
+            // Update bundle label colors in inventory columns
+            document.querySelectorAll('.bundle-label').forEach(label => {
+                label.style.color = theme.text;
+            });
+
+            // Update control buttons (Start, Pause, Reset)
+            document.getElementById('startBtn').style.background = theme.btn;
+            document.getElementById('startBtn').style.color = theme.text;
+            document.getElementById('pauseBtn').style.background = theme.btn;
+            document.getElementById('pauseBtn').style.color = theme.text;
+            document.getElementById('resetBtn').style.background = theme.btn;
+            document.getElementById('resetBtn').style.color = theme.text;
+
+            // Update break timer buttons
+            document.getElementById('breakStartBtn').style.background = theme.btn;
+            document.getElementById('breakStartBtn').style.color = theme.text;
+            document.getElementById('breakPauseBtn').style.background = theme.btn;
+            document.getElementById('breakPauseBtn').style.color = theme.text;
+            document.getElementById('breakResetBtn').style.background = theme.btn;
+            document.getElementById('breakResetBtn').style.color = theme.text;
+
+            //Update stopwatch buttons
+            document.getElementById('stopwatchStartBtn').style.background = theme.btn;
+            document.getElementById('stopwatchStartBtn').style.color = theme.text;
+            document.getElementById('stopwatchPauseBtn').style.background = theme.btn;
+            document.getElementById('stopwatchPauseBtn').style.color = theme.text;
+            document.getElementById('stopwatchResetBtn').style.background = theme.btn;
+            document.getElementById('stopwatchResetBtn').style.color = theme.text;
+         
+
+            // Update tab buttons
+            document.getElementById('pomodoroTabBtn').style.background = theme.btn;
+            document.getElementById('pomodoroTabBtn').style.color = theme.text;
+            document.getElementById('shopTabBtn').style.background = theme.btn;
+            document.getElementById('shopTabBtn').style.color = theme.text;
+            document.getElementById('settingsTabBtn').style.background = theme.btn;
+            document.getElementById('settingsTabBtn').style.color = theme.text;
+            document.getElementById('todoTabBtn').style.background = theme.btn;
+            document.getElementById('todoTabBtn').style.color = theme.text;
+            document.getElementById('addActivityBtn').style.background = theme.btn;
+            document.getElementById('addActivityBtn').style.color = theme.text;
+                      //Settings tab buttons
+            document.getElementById('settingsPomodoroTabBtn').style.background = theme.btn;
+            document.getElementById('settingsPomodoroTabBtn').style.color = theme.text;
+            document.getElementById('settingsDataTabBtn').style.background = theme.btn;
+            document.getElementById('settingsDataTabBtn').style.color = theme.text;
+            // Style settings wipe button
+            if (document.getElementById('deleteDataBtn')) {
+                document.getElementById('deleteDataBtn').style.background = theme.btn;
+                document.getElementById('deleteDataBtn').style.color = theme.text;
+            }
+            // Style settings currency button
+            if (document.getElementById('setCurrencyBtn')) {
+                document.getElementById('setCurrencyBtn').style.background = theme.btn;
+                document.getElementById('setCurrencyBtn').style.color = theme.text;
+            }
+          
+            // PIN setting buttons
+            document.getElementById('setPinBtn').style.background = theme.btn;
+            document.getElementById('setPinBtn').style.color = theme.text;
+            document.getElementById('clearPinBtn').style.background = theme.btn;
+            document.getElementById('clearPinBtn').style.color = theme.text;
+          
+        
+            // Style progress bar
+            if (document.getElementById('progressBar')) {
+                document.getElementById('progressBar').style.background = theme.btn;
+            }
+            // Style To Do List tab: week day containers and activities
+            for (let i = 0; i < 7; i++) {
+                // Day container background and text
+                const dayContainer = document.getElementById('todoDay' + i);
+                if (dayContainer) {
+                    dayContainer.style.background = theme.Tb;
+                    dayContainer.style.color = theme.text;
+                }
+                // Day title
+                const dayTitle = dayContainer ? dayContainer.querySelector('h3') : null;
+                if (dayTitle) {
+                    dayTitle.style.color = theme.text;
+                }
+                // Completion estimate
+                const estimate = document.getElementById('completionEstimate' + i);
+                if (estimate) {
+                    estimate.style.color = theme.text;
+                }
+                // Add Activity button
+                const addBtn = document.getElementById('addActivityBtn' + i);
+                if (addBtn) {
+                    addBtn.style.background = theme.btn;
+                    addBtn.style.color = theme.text;
+                }
+                // Activities
+                const activityList = document.getElementById('activityList');
+                if (activityList) {
+                    activityList.querySelectorAll('.activity').forEach(div => {
+                        div.style.background = theme.bg;
+                        div.style.color = theme.text;
+                    });
+                    activityList.querySelectorAll('.activityCompleteBtn').forEach(btn => {
+                        btn.style.background = theme.btn;
+                        btn.style.color = theme.text;
+                    });
+                }
+            }
+            // Modal buttons
+            document.getElementById('confirmActivityBtn').style.background = theme.btn;
+            document.getElementById('confirmActivityBtn').style.color = theme.text;
+            document.getElementById('cancelActivityBtn').style.background = theme.btn;
+            document.getElementById('cancelActivityBtn').style.color = theme.text;
+            // Top bar and app title
+            document.getElementById('topBar').style.background = theme.Tb;
+            document.getElementById('AppTitle').style.color = theme.text;
+            renderInventory();
+        }
 
         function updateTimerDisplay() {
             const minutes = Math.floor(timer / 60);
@@ -998,31 +1188,26 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('progressText').textContent = percent + '%';
         }
         function updateCoinsDisplay() {
-            document.getElementById('coinCount').textContent = coins;
-            if (!document.getElementById('coinCount').nextElementSibling || !document.getElementById('coinCount').nextElementSibling.classList.contains('coin-icon')) {
+            document.getElementById('coinCountTop').textContent = coins;
+            if (!document.getElementById('coinCountTop').nextElementSibling || !document.getElementById('coinCountTop').nextElementSibling.classList.contains('coin-icon')) {
                 const coinImg = document.createElement('img');
-                coinImg.src = './images/currencyimage.png';
+                coinImg.src = './images/coinimage.png';
                 coinImg.alt = 'Coin';
                 coinImg.className = 'coin-icon';
-                document.getElementById('coinCount').after(coinImg);
+                document.getElementById('coinCountTop').after(coinImg);
             }
-            document.getElementById('coinCountShop').textContent = coins;
-            if (!document.getElementById('coinCountShop').nextElementSibling || !document.getElementById('coinCountShop').nextElementSibling.classList.contains('coin-icon')) {
-                const coinImg = document.createElement('img');
-                coinImg.src = './images/currencyimage.png';
-                coinImg.alt = 'Coin';
-                coinImg.className = 'coin-icon';
-                document.getElementById('coinCountShop').after(coinImg);
-            }
-            document.getElementById('coinCountTDL').textContent = coins;
-            if (!document.getElementById('coinCountTDL').nextElementSibling || !document.getElementById('coinCountTDL').nextElementSibling.classList.contains('coin-icon')) {
-                const coinImg = document.createElement('img');
-                coinImg.src = './images/currencyimage.png';
-                coinImg.alt = 'Coin';
-                coinImg.className = 'coin-icon';
-                document.getElementById('coinCountTDL').after(coinImg);
-            }
+     
         }
+        function updateCrystalsDisplay() {
+           document.getElementById('crystalCountTop').textContent = crystals;
+            if (!document.getElementById('crystalCountTop').nextElementSibling || !document.getElementById('crystalCountTop').nextElementSibling.classList.contains('crystal-icon')) {
+                const crystalImg = document.createElement('img');
+                crystalImg.src = './images/crystalimage.png';
+                crystalImg.alt = 'Crystal';
+                crystalImg.className = 'crystal-icon';
+                document.getElementById('crystalCountTop').after(crystalImg);
+            }
+          }
 
         // --- Timer Mode Logic ---
         function showTimerMode(mode) {
@@ -1044,8 +1229,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         // --- Study Timer ---
         function startTimer() {
           
-             let IfSuccess = getPIN();
-             if (!IfSuccess) return;
+          
 
 
             if (interval) return;
@@ -1200,7 +1384,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             document.getElementById('stopwatchPauseBtn').disabled = true;
         }
         // --- PIN Logic ---
-        document.getElementById('setPinBtn').onclick = function() {
+  document.getElementById('setPinBtn').onclick = function() {
          
     const pinInput = document.getElementById('pinSettingInput').value.trim();
     const msg = document.getElementById('pinSettingMsg');
@@ -1222,7 +1406,8 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
      updateClearPinBtnState();
 };
 
-        document.getElementById('clearPinBtn').onclick = function() {
+
+ document.getElementById('clearPinBtn').onclick = function() {
    const pinInput = document.getElementById('pinSettingInput').value.trim();
        const msg = document.getElementById('pinSettingMsg');
  const savedPIN = localStorage.getItem('pomodoroPIN');
@@ -1231,7 +1416,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         msg.style.color = "#e74c3c";
          setTimeout(function() {
      msg.textContent = "";
-        }, 1000); // 1000ms = 2 saniye
+        }, 1000); // 1000ms = 1 saniye
         return;
  }
   if (pinInput !== savedPIN) {
@@ -1239,7 +1424,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         msg.style.color = "#e74c3c";
          setTimeout(function() {
      msg.textContent = "";
-        }, 1000); // 1000ms = 2 saniye
+        }, 1000); // 1000ms = 1 saniye
         return;
   }
 
@@ -1253,6 +1438,43 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         }, 1000); // 1000ms = 2 saniye
        updateClearPinBtnState();
 };
+
+// --- Set Data ---
+
+document.getElementById('setCurrencyBtn').onclick = function() {
+  const type = document.getElementById('setCurrencyType').value;
+  const value = parseInt(document.getElementById('setCurrencyValue').value);
+  const msg = document.getElementById('setCurrencyMsg');
+  if (isNaN(value) || value < 0) {
+    msg.textContent = "Please enter a valid non-negative number.";
+    msg.style.color = "#e74c3c";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+    return;
+  }
+  if (type === 'coins') {
+    coins = value;
+    saveCoins();
+    updateCoinsDisplay();
+    msg.textContent = `Coins set to ${value}`;
+    msg.style.color = "#2ecc71";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+  } else if (type === 'crystal') {
+    crystals = value;
+    saveCrystals();
+    updateCrystalsDisplay();
+    msg.textContent = `Crystals set to ${value}`;
+    msg.style.color = "#2ecc71";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+  }
+  document.getElementById('setCurrencyValue').value = '';
+};
+
 
         // --- Event Listeners for Timer Modes ---
         document.getElementById('studyMode').addEventListener('change', function() {
@@ -1442,14 +1664,39 @@ if (!IfSuccess) return;
                 bundleLabel.style.marginBottom = '8px';
                 col.appendChild(bundleLabel);
                 bundleMap[bundle].forEach(theme => {
+
                     const btn = document.createElement('button');
-                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/currencyimage.png' alt='Coin' class='coin-icon'>`;
+          
+                     
+                 // Exclusive themes and other themes are different
+if (theme.bundle === "Exclusive") {
+                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/crystalimage.png' alt='Crystal' class='crystal-icon'>`;        
+                    btn.className = 'themeBtn shopBtn';
+                    btn.style.background = theme.btn;
+                    btn.style.color = theme.text;
+                    btn.style.marginBottom = '8px';
+                    btn.onclick = function() {
+                        if (crystals >= theme.price) {
+                     
+                            subtractCrystals(theme.price);
+                            ownedThemes.push(theme.name);
+                            localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
+                            renderShop();
+                            renderInventory();
+                        } else {
+                            showCustomAlert("Not enough crystals!", "error");
+                        }
+                    };
+}   else {
+
+                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/coinimage.png' alt='Coin' class='coin-icon'>`;        
                     btn.className = 'themeBtn shopBtn';
                     btn.style.background = theme.btn;
                     btn.style.color = theme.text;
                     btn.style.marginBottom = '8px';
                     btn.onclick = function() {
                         if (coins >= theme.price) {
+                     
                             subtractCoins(theme.price);
                             ownedThemes.push(theme.name);
                             localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
@@ -1459,7 +1706,15 @@ if (!IfSuccess) return;
                             showCustomAlert("Not enough coins!", "error");
                         }
                     };
+
+ 
+} 
+
+
+
                     col.appendChild(btn);
+
+
                 });
                 bundlesRow.appendChild(col);
             });
@@ -1516,145 +1771,7 @@ if (!IfSuccess) return;
             });
         }
 
-        function selectTheme(themeName) {
-          
-            selectedTheme = themeName;
-            const theme = themes.find(t => t.name === themeName);
-          //      const fontstyle = choosentheme.FS || "";
-
-          //Update top bar
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', theme.Tb);
-          //Update head
-
-            document.body.style.background = theme.bg;
-            document.querySelector('.container').style.background = theme.bg;
-            document.getElementById('mainTitle').style.color = theme.title || theme.text;
-               document.getElementById('CounterTitle').style.color = theme.title || theme.text;
-            document.getElementById('shopTitle').style.color = theme.title || theme.text;
-            document.getElementById('settingsTitle').style.color = theme.title || theme.text;
-            document.querySelector('.container').style.color = theme.text;
-            document.getElementById('todoListContainer').style.background = theme.Tb;
-             
-       
-        
-            // Update only inventory themeBtn buttons (not shopBtn)
-            document.querySelectorAll('.themeBtn').forEach(btn => {
-                if (!btn.classList.contains('shopBtn')) {
-                    btn.style.background = theme.btn;
-                    btn.style.color = theme.text;
-                }
-            });
-            // Update bundle label colors in inventory columns
-            document.querySelectorAll('.bundle-label').forEach(label => {
-                label.style.color = theme.text;
-            });
-
-            // Update control buttons (Start, Pause, Reset)
-            document.getElementById('startBtn').style.background = theme.btn;
-            document.getElementById('startBtn').style.color = theme.text;
-            document.getElementById('pauseBtn').style.background = theme.btn;
-            document.getElementById('pauseBtn').style.color = theme.text;
-            document.getElementById('resetBtn').style.background = theme.btn;
-            document.getElementById('resetBtn').style.color = theme.text;
-
-            // Update break timer buttons
-            document.getElementById('breakStartBtn').style.background = theme.btn;
-            document.getElementById('breakStartBtn').style.color = theme.text;
-            document.getElementById('breakPauseBtn').style.background = theme.btn;
-            document.getElementById('breakPauseBtn').style.color = theme.text;
-            document.getElementById('breakResetBtn').style.background = theme.btn;
-            document.getElementById('breakResetBtn').style.color = theme.text;
-
-            //Update stopwatch buttons
-            document.getElementById('stopwatchStartBtn').style.background = theme.btn;
-            document.getElementById('stopwatchStartBtn').style.color = theme.text;
-            document.getElementById('stopwatchPauseBtn').style.background = theme.btn;
-            document.getElementById('stopwatchPauseBtn').style.color = theme.text;
-            document.getElementById('stopwatchResetBtn').style.background = theme.btn;
-            document.getElementById('stopwatchResetBtn').style.color = theme.text;
-         
-
-            // Update tab buttons
-            document.getElementById('pomodoroTabBtn').style.background = theme.btn;
-            document.getElementById('pomodoroTabBtn').style.color = theme.text;
-            document.getElementById('shopTabBtn').style.background = theme.btn;
-            document.getElementById('shopTabBtn').style.color = theme.text;
-            document.getElementById('settingsTabBtn').style.background = theme.btn;
-            document.getElementById('settingsTabBtn').style.color = theme.text;
-            document.getElementById('todoTabBtn').style.background = theme.btn;
-            document.getElementById('todoTabBtn').style.color = theme.text;
-            document.getElementById('addActivityBtn').style.background = theme.btn;
-            document.getElementById('addActivityBtn').style.color = theme.text;
-                      //Settings tab buttons
-            document.getElementById('settingsPomodoroTabBtn').style.background = theme.btn;
-            document.getElementById('settingsPomodoroTabBtn').style.color = theme.text;
-            document.getElementById('settingsDataTabBtn').style.background = theme.btn;
-            document.getElementById('settingsDataTabBtn').style.color = theme.text;
-            // Style settings wipe button
-            if (document.getElementById('deleteDataBtn')) {
-                document.getElementById('deleteDataBtn').style.background = theme.btn;
-                document.getElementById('deleteDataBtn').style.color = theme.text;
-            }
-            document.getElementById('changeDataBtn').style.background = theme.bg;
-            document.getElementById('changeDataBtn').style.color = theme.text;
-            // PIN setting buttons
-            document.getElementById('setPinBtn').style.background = theme.btn;
-            document.getElementById('setPinBtn').style.color = theme.text;
-            document.getElementById('clearPinBtn').style.background = theme.btn;
-            document.getElementById('clearPinBtn').style.color = theme.text;
-          
-        
-            // Style progress bar
-            if (document.getElementById('progressBar')) {
-                document.getElementById('progressBar').style.background = theme.btn;
-            }
-            // Style To Do List tab: week day containers and activities
-            for (let i = 0; i < 7; i++) {
-                // Day container background and text
-                const dayContainer = document.getElementById('todoDay' + i);
-                if (dayContainer) {
-                    dayContainer.style.background = theme.Tb;
-                    dayContainer.style.color = theme.text;
-                }
-                // Day title
-                const dayTitle = dayContainer ? dayContainer.querySelector('h3') : null;
-                if (dayTitle) {
-                    dayTitle.style.color = theme.text;
-                }
-                // Completion estimate
-                const estimate = document.getElementById('completionEstimate' + i);
-                if (estimate) {
-                    estimate.style.color = theme.text;
-                }
-                // Add Activity button
-                const addBtn = document.getElementById('addActivityBtn' + i);
-                if (addBtn) {
-                    addBtn.style.background = theme.btn;
-                    addBtn.style.color = theme.text;
-                }
-                // Activities
-                const activityList = document.getElementById('activityList');
-                if (activityList) {
-                    activityList.querySelectorAll('.activity').forEach(div => {
-                        div.style.background = theme.bg;
-                        div.style.color = theme.text;
-                    });
-                    activityList.querySelectorAll('.activityCompleteBtn').forEach(btn => {
-                        btn.style.background = theme.btn;
-                        btn.style.color = theme.text;
-                    });
-                }
-            }
-            // Modal buttons
-            document.getElementById('confirmActivityBtn').style.background = theme.btn;
-            document.getElementById('confirmActivityBtn').style.color = theme.text;
-            document.getElementById('cancelActivityBtn').style.background = theme.btn;
-            document.getElementById('cancelActivityBtn').style.color = theme.text;
-            // Top bar and app title
-            document.getElementById('topBar').style.background = theme.Tb;
-            document.getElementById('AppTitle').style.color = theme.text;
-            renderInventory();
-        }
+   
 
         // Initial render
         // Load coins, inventory, and goal from localStorage and reset if needed
@@ -1664,7 +1781,7 @@ if (!IfSuccess) return;
             const today = getTodayString();
             const hour = getCurrentHour();
             // Load Gems
-            const savedgems = localStorage.getItem('pomodoroCoins');
+            const savedcrystals = localStorage.getItem('pomodoroCrystals');
             // Load inventory
             const inv = localStorage.getItem('pomodoroInventory');
             ownedThemes = inv ? JSON.parse(inv) : ["Classic"];
@@ -1673,6 +1790,7 @@ if (!IfSuccess) return;
             goal = savedGoal ? parseInt(savedGoal) : 100;
             document.getElementById('goalInput').value = goal;
                 coins = saved ? parseInt(saved) : 0;
+                crystals = savedcrystals ? parseInt(savedcrystals) : 0;
             
         }
         loadAllData();
@@ -1680,6 +1798,7 @@ if (!IfSuccess) return;
         updateBreakTimerDisplay();
         updateStopwatchDisplay();
         updateCoinsDisplay();
+        updateCrystalsDisplay();
         renderShop();
         renderInventory();
         selectTheme(selectedTheme);
@@ -1743,7 +1862,7 @@ function renderTodoActivities() {
         nameSpan.textContent = act.name;
         nameSpan.style.fontWeight = 'bold';
         const priceSpan = document.createElement('span');
-        priceSpan.innerHTML = `${act.price} <img src='./images/currencyimage.png' alt='Coin' class='coin-icon'> `;
+        priceSpan.innerHTML = `${act.price} <img src='./images/coinimage.png' alt='Coin' class='coin-icon'> `;
         priceSpan.style.marginLeft = '1em';
         // Complete button
         const btn = document.createElement('button');
@@ -1941,13 +2060,20 @@ function DeleteData(datatype) {
         updateProgressBar();
         showCustomAlert('Coin data deleted!', 'success');
         
+      } else if (datatype === 'crystals') {
+        crystals = 0;
+        saveCrystals();
+        updateCrystalsDisplay();
+        showCustomAlert('Crystal data deleted!', 'success');
+
+
       } else if (datatype === 'inventory') {
         ownedThemes = ['Classic','Night'];
         localStorage.setItem('pomodoroInventory', JSON.stringify(ownedThemes));
         renderInventory();
         showCustomAlert('Inventory data deleted!', 'success');
 
- 
+    
 
       } else {
         coins = 0;
@@ -2008,6 +2134,9 @@ function loadSettings() {
   document.getElementById('AutoStartBreak').checked = localStorage.getItem('pomodoroAutoStartBreak') === '1';
   document.getElementById('AutoStartStudy').checked = localStorage.getItem('pomodoroAutoStartStudy') === '1';
 }
+
+
+
 // Attach saveSettings to all relevant controls
 ['autoDeleteEnable','autoDeleteDay','autoDeleteHour','autoDeleteType','manualDeleteType','SettingOne','AutoStartBreak','AutoStartStudy'].forEach(id => {
   const el = document.getElementById(id);
@@ -2016,13 +2145,9 @@ function loadSettings() {
 loadSettings();
 updateAutoDeleteCountdown();
 
-// window.addEventListener("beforeunload", function (e) {
-  // Mesajı göster
-  //e.preventDefault(); // Bazı tarayıcılarda gerekli
-  //e.returnValue = ''; // Chrome gibi modern tarayıcılar için bu satır şart
-  
-  // Not: return değeri kullanıcıya gösterilmez, sadece uyarı çıkmasını sağlar.
-//});
+
+
+    
 
 // Ensure only Pomodoro tab is visible on load
 window.addEventListener('DOMContentLoaded', function() {
@@ -2030,7 +2155,11 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('SettingTabData').style.display = 'none';
   document.getElementById('settingsPomodoroTabBtn').classList.add('active');
   document.getElementById('settingsDataTabBtn').classList.remove('active');
+
 });
+
+
+
     </script>
 </body>
 </html>
