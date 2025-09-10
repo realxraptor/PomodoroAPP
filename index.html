@@ -29,26 +29,21 @@
 }
 .activity .activityCompleteBtn {
   font-size: 0.95em;
-  margin-left: 0.5em;
-  padding: 0.5em 1em;
+  margin-left: 1em;
+  padding: 0.1em 0.1em;
 }
 .activity .goalBtn {
   font-size: 1em;
   margin-left: 0.5em;
   padding: 0.5em 1em;
 }
-.coin-icon {
-  height: 1em;
-  width: auto;
+.currency-icon {
+    font-size: 3em;
+  height: 5em;
   vertical-align: middle;
-  margin-left: 4px;
+  margin-left: 3px;
 }
-.crystal-icon {
-  height: 1em;
-  width: auto;
-  vertical-align: middle;
-  margin-left: 4px;
-}
+
 /* Settings sliders */
 .switch {
   display: flex;
@@ -98,50 +93,7 @@ input:checked + .slider::before {
 }
 /* Media responsive */
 
-@media (max-width: 768px) {
-  .activity {
-    padding: 0.7em 1em;
-    font-size: 1em;
-  }
-  .activity span {
-    font-size: 0.95em;
-  }
-  .activity .activityCompleteBtn,
-  .activity .goalBtn {
-    font-size: 0.9em;
-    padding: 0.4em 0.7em;
-  }
-}
-@media (max-width: 480px) {
-  .activity {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0.5em 0.5em;
-    font-size: 0.95em;
-  }
-  .activity span {
-    font-size: 0.9em;
-    margin-bottom: 0.5em;
-  }
-  .activity .activityCompleteBtn,
-  .activity .goalBtn {
-    font-size: 0.85em;
-    margin-left: 0;
-    margin-top: 0.5em;
-    padding: 0.35em 0.6em;
-    width: 100%;
-    box-sizing: border-box;
-  }
-}
-/* Responsive Set Goal button */
-.goalBtn {
-  font-size: 1em;
-  padding: 0.7em 1.5em;
-  max-width: 100%;
-  margin-left: 24px;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+
 @media (max-width: 480px) {
   .goalBtn {
     font-size: 0.95em;
@@ -197,8 +149,8 @@ h1 {
   color: #d35400;
   font-size: 2.2em;
 }
-.coins {
-  font-size: 1.3em;
+.currency-icon {
+  font-size: 0.3em;
   margin-bottom: 1em;
   text-align: center;
   display:flex;
@@ -206,15 +158,11 @@ h1 {
   align-items:center;
   gap:24px;
 }
-.crystals {
-  font-size: 1.3em;
-  margin-bottom: 1em;
-  text-align: center;
-}
+
 .timer {
-  font-size: 2.5em;
+  font-size: 4.5em;
   text-align: center;
-  margin: 1.5em 0;
+  margin: 0.25em 0;
 }
 .controls {
   text-align: center;
@@ -379,7 +327,7 @@ button:disabled {
 #navTabs {
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 1.2em;
   flex: 1;
 }
 #navTitle {
@@ -389,6 +337,21 @@ button:disabled {
   color: var(--theme-title, #d35400);
   transition: color 0.3s;
 }
+.Indicator {
+  font-size: 2em;
+  font-weight: bold;
+  transition: color 0.3s;
+
+
+}
+
+#todoTab {
+  max-width: 900px; /* or 100%, or whatever you prefer */
+  width: 120%;      /* makes it fill available space */
+  margin: 32px auto;
+  /* ...other styles... */
+}
+
 @media (max-width: 768px) {
   body {
     font-size: 1rem;
@@ -407,7 +370,7 @@ button:disabled {
   }
   button, .settingsBtn, .tabBtn, .themeBtn {
     font-size: 0.95em;
-    padding: 0.5em 1em;
+
   }
   #topBar {
     display: flex;
@@ -419,9 +382,10 @@ button:disabled {
     margin: 0 auto 0.5em auto;
   }
   #navTabs {
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5em;
     align-items: flex-start;
+    flex-wrap: wrap;
   }
   #navTitle {
     margin-right: 0;
@@ -430,42 +394,14 @@ button:disabled {
   #dividerLine {
     height: 36px;
   }
-}
-@media (max-width: 480px) {
-  body {
-    font-size: 0.9rem;
-  }
-  h1 {
-    font-size: 1.1em;
-  }
-  .timer {
-    font-size: 1.3em;
-  }
-  .coins {
-    font-size: 0.95em;
-  }
-  #AppTitle {
-    font-size: 1em;
-  }
-  button, .settingsBtn, .tabBtn, .themeBtn {
-    font-size: 0.9em;
-    padding: 0.4em 0.7em;
-  }
-  #topBar {
-    padding: 0.25em 0.25em;
-  }
-  #logoPlaceholder {
-    width: 36px;
-    height: 36px;
-    font-size: 1em;
-  }
-  #navTitle {
-    font-size: 1em;
-  }
-  #dividerLine {
-    height: 24px;
+  #todoTab {
+  max-width: 100%; /* or 100%, or whatever you prefer */
+  width: 100%;      /* makes it fill available space */
+  
+  /* ...other styles... */
   }
 }
+
 
 
 /* --- End Responsive Layout --- */
@@ -505,15 +441,16 @@ button:disabled {
   <span id="AppTitle"> Pomocoin </span>
   <div id="navTabs">
     <button class="tabBtn active" id="pomodoroTabBtn">Pomodoro</button>
-    <button class="tabBtn" id="shopTabBtn">Shop</button>
+    <button class="tabBtn" id="shopTabBtn">Themes</button>
     <button class="tabBtn" id="settingsTabBtn">Settings</button>
-    <button class="tabBtn" id="todoTabBtn">To Do List</button>
+    <button class="tabBtn" id="todoTabBtn">Rewards</button>
+     <span class="Indicator" id="coinCountTop">0</span>
+    <span class="Indicator" id="crystalCountTop">0</span>
   </div>
-  <div id="currencyIndicators" style="display:flex; align-items:center; gap:24px; position:absolute; right:32px; top:16px;">
-    <span id="coinCountTop">0</span>
-    <span id="crystalCountTop">0</span>
+  
 
-  </div>
+
+            
 </div>
 <!-- Divider Line -->
 
@@ -591,14 +528,23 @@ button:disabled {
              
             </div>
             <div id="shopTab" class="tabContent" style="display:none;">
-                          <h2 id="shopTitle" style="text-align:center; color:#d35400;">Shop</h2>
-      
-                <div id="themesShop" style="margin-bottom:24px;"></div>
-                <h3 style="text-align:center; color:#888;">Inventory</h3>
-                <div id="inventoryThemes" style="text-align:center;"></div>
-                 
-            </div>
+                <h2 id="shopTitle" style="text-align:center; color:#d35400;">Themes</h2>
+
+  <!-- Shop Sub-Tabs -->
+
+  <!-- Themes Shop Content -->
+  <div id="themesShopContainer">
+    <div id="themesShop" style="margin-bottom:24px;"></div>
+    <h3 style="text-align:center; color:#888;">Inventory</h3>
+    <div id="inventoryThemes" style="text-align:center;"></div>
+  </div>
+  <!-- Exclusive Shop Content -->
+  <div id="exclusiveShopContainer" style="display:none;">
+    <div id="exclusiveItems" style="text-align:center; margin-bottom:24px;"></div>
+  </div>
+</div>
             <div id="settingsTab" class="tabContent" style="display:none;">
+
                 <h2 style="text-align:center;" id="settingsTitle">Settings</h2>
                         
                   <!-- Settings Mode-->
@@ -734,22 +680,28 @@ button:disabled {
 
                 </div>
 
-</div>
+
+  
+                
+
+               
+              </div>
 
 
-             
+    
 
 
                 
         </div>
             <!-- New To Do List Tab -->
             <div id="todoTab" class="tabContent" style="display:none;">
-                <h2 style="text-align:center;">To Do List</h2>
+                <h2 style="text-align:center;">Rewards</h2>
                 <div id="todoListContainer" style="max-width:600px; margin:32px auto; background:#f8f8f8; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:32px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
                         <span id="completionEstimate" style="color:#888; font-size:1.1em;">Estimated finish time: --:--</span>
-                        <button id="addActivityBtn" class="settingsBtn" style="font-size:1.1em; padding:12px 32px;">Add Activity</button>
+                        <button id="addActivityBtn" class="settingsBtn" style="font-size:1.1em; padding:12px 32px;">Add Reward</button>
                     </div>
+                  
                     <div id="activityList"></div>
                 </div>
               
@@ -764,11 +716,13 @@ button:disabled {
   <!-- TDL -->
 <div id="activityModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:1000; justify-content:center; align-items:center;">
     <div style="background:#fff; padding:24px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.2); min-width:300px; max-width:90vw; margin:auto;">
-        <h3 style="margin-top:0;">Add Activity</h3>
-        <label>Activity Name:</label>
+        <h3 style="margin-top:0;">Add Reward</h3>
+        <label>Reward Name:</label>
         <input type="text" id="activityNameInput" style="width:100%; margin-bottom:12px;">
         <label>Coin Price:</label>
         <input type="number" id="activityPriceInput" min="1" value="10" style="width:100%; margin-bottom:12px;">
+        <label>Crystal Reward:</label>
+        <input type="number" id="activityRewardInput" min="1" value="10" style="width:100%; margin-bottom:12px;">
         <div style="text-align:right;">
             <button id="confirmActivityBtn" class="settingsBtn">Confirm</button>
             <button id="cancelActivityBtn" class="settingsBtn" style="background:#ccc; color:#222;">Cancel</button>
@@ -884,7 +838,7 @@ function getCurrentHour() {
          
         }
         function subtractCrystals(amount) {
-            coins = Math.max(0, crystals - amount);
+            crystals= Math.max(0, crystals - amount);
             saveCrystals();
             updateCrystalsDisplay();
         }
@@ -972,13 +926,14 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             {name: "Sapphire", bundle: "Gemstone", price: 180, bg: "#e3f2fd", btn: "#2196f3",Tb: "#bbdefb", text: "#222" ,},
             { name: "Amethyst", bundle: "Gemstone", price: 180, bg: "#E6D6F3", btn: "#6A4C93",Tb: "#B088CC", text: "#222" ,},
           { name: "Diamond", bundle: "Gemstone",price: 180, bg: "#F0F8FF", btn: "#8DA9C4",Tb: "#C8D8E4", text: "#222" ,},
-          
-            {name: "Horizon", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Horizon.png", btn: "#2046A1",Tb: "#7D03FF", text: "#03164A" ,transparency: 0.3},
-            {name: "Saturn", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Saturn.jpeg", btn: "#EBC7F0",Tb: "#E387E8", text: "#5E1269" ,transparency: 0.8},
-            {name: "Circuit", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Circuit.jpeg", btn: "#381A89",Tb: "#252B99", text: "#0B0F38" ,transparency: 0.4},
-            {name: "Aurora", bundle: "Exclusive", price: 8, bg: "./ExclusiveThemes/bg_Aurora.jpeg", btn: "#34495e",Tb: "#4f4f4f ", text: "#A3F7BF" ,transparency: 0.1},
-            {name: "Warrior", bundle: "Exclusive", price: 8, bg: "./ExclusiveThemes/bg_Warrior.jpeg", btn: "#AB305A",Tb: "#5C3B5E", text: "#222" ,transparency: 0.25},
-             {name: "Zenith", bundle: "Exclusive", price: 8, bg: "./ExclusiveThemes/bg_Zenith.jpeg", btn: "#BDA644",Tb: "#e6e6e6", text: "#FAE073" ,transparency: 0.1},
+              
+            {name: "Wormhole", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Wormhole.jpeg", btn: "#3D4CD4",Tb: "#2E3CB3", text: "#51BAC4" ,transparency: 0.8},
+            {name: "Horizon", bundle: "Exclusive", price: 15, bg: "./ExclusiveThemes/bg_Horizon.png", btn: "#2046A1",Tb: "#7D03FF", text: "#03164A" ,transparency: 0.3},
+            {name: "Saturn", bundle: "Exclusive", price: 15, bg: "./ExclusiveThemes/bg_Saturn.jpeg", btn: "#EBC7F0",Tb: "#E387E8", text: "#5E1269" ,transparency: 0.8},
+            {name: "Circuit", bundle: "Exclusive", price: 25, bg: "./ExclusiveThemes/bg_Circuit.jpeg", btn: "#381A89",Tb: "#252B99", text: "#0B0F38" ,transparency: 0.4},
+            {name: "Aurora", bundle: "Exclusive", price: 25, bg: "./ExclusiveThemes/bg_Aurora.jpeg", btn: "#34495e",Tb: "#4f4f4f ", text: "#A3F7BF" ,transparency: 0.1},
+            {name: "Warrior", bundle: "Exclusive", price: 50, bg: "./ExclusiveThemes/bg_Warrior.jpeg", btn: "#AB305A",Tb: "#5C3B5E", text: "#222" ,transparency: 0.25},
+            {name: "Zenith", bundle: "Exclusive", price: 50, bg: "./ExclusiveThemes/bg_Zenith.jpeg", btn: "#BDA644",Tb: "#e6e6e6", text: "#FAE073" ,transparency: 0.1},
   
 
            
@@ -1143,10 +1098,6 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
                         div.style.background = theme.bg;
                         div.style.color = theme.text;
                     });
-                    activityList.querySelectorAll('.activityCompleteBtn').forEach(btn => {
-                        btn.style.background = theme.btn;
-                        btn.style.color = theme.text;
-                    });
                 }
             }
             // Modal buttons
@@ -1189,22 +1140,22 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
         }
         function updateCoinsDisplay() {
             document.getElementById('coinCountTop').textContent = coins;
-            if (!document.getElementById('coinCountTop').nextElementSibling || !document.getElementById('coinCountTop').nextElementSibling.classList.contains('coin-icon')) {
+            if (!document.getElementById('coinCountTop').nextElementSibling || !document.getElementById('coinCountTop').nextElementSibling.classList.contains('currency-icon')) {
                 const coinImg = document.createElement('img');
                 coinImg.src = './images/coinimage.png';
                 coinImg.alt = 'Coin';
-                coinImg.className = 'coin-icon';
+                coinImg.className = 'currency-icon';
                 document.getElementById('coinCountTop').after(coinImg);
             }
      
         }
         function updateCrystalsDisplay() {
            document.getElementById('crystalCountTop').textContent = crystals;
-            if (!document.getElementById('crystalCountTop').nextElementSibling || !document.getElementById('crystalCountTop').nextElementSibling.classList.contains('crystal-icon')) {
+            if (!document.getElementById('crystalCountTop').nextElementSibling || !document.getElementById('crystalCountTop').nextElementSibling.classList.contains('currency-icon')) {
                 const crystalImg = document.createElement('img');
                 crystalImg.src = './images/crystalimage.png';
                 crystalImg.alt = 'Crystal';
-                crystalImg.className = 'crystal-icon';
+                crystalImg.className = 'currency-icon';
                 document.getElementById('crystalCountTop').after(crystalImg);
             }
           }
@@ -1666,15 +1617,15 @@ if (!IfSuccess) return;
                 bundleMap[bundle].forEach(theme => {
 
                     const btn = document.createElement('button');
-          
-                     
-                 // Exclusive themes and other themes are different
-if (theme.bundle === "Exclusive") {
-                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/crystalimage.png' alt='Crystal' class='crystal-icon'>`;        
                     btn.className = 'themeBtn shopBtn';
+                    btn.style.fontWeight = 'bold';
                     btn.style.background = theme.btn;
                     btn.style.color = theme.text;
                     btn.style.marginBottom = '8px';
+                     
+                 // Exclusive themes and other themes are different
+if (theme.bundle === "Exclusive") {
+                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/crystalimage.png' alt='Crystal' class='currency-icon'>`;        
                     btn.onclick = function() {
                         if (crystals >= theme.price) {
                      
@@ -1689,11 +1640,7 @@ if (theme.bundle === "Exclusive") {
                     };
 }   else {
 
-                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/coinimage.png' alt='Coin' class='coin-icon'>`;        
-                    btn.className = 'themeBtn shopBtn';
-                    btn.style.background = theme.btn;
-                    btn.style.color = theme.text;
-                    btn.style.marginBottom = '8px';
+                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/coinimage.png' alt='Coin' class='currency-icon'>`;        
                     btn.onclick = function() {
                         if (coins >= theme.price) {
                      
@@ -1762,6 +1709,7 @@ if (theme.bundle === "Exclusive") {
                     btn.style.background = theme.btn;
                     btn.style.color = theme.text;
                     btn.style.marginBottom = '8px';
+                      btn.style.fontWeight = 'bold';
                     btn.onclick = function() {
                         selectTheme(theme.name);
                     };
@@ -1859,19 +1807,31 @@ function renderTodoActivities() {
         div.style.setProperty('--activity-text', themeObj.text);
         // Responsive content
         const nameSpan = document.createElement('span');
-        nameSpan.textContent = act.name;
+        nameSpan.textContent = `${act.name}`;
         nameSpan.style.fontWeight = 'bold';
         const priceSpan = document.createElement('span');
-        priceSpan.innerHTML = `${act.price} <img src='./images/coinimage.png' alt='Coin' class='coin-icon'> `;
-        priceSpan.style.marginLeft = '1em';
+        priceSpan.innerHTML = `${act.price} <img src='./images/coinimage.png' alt='Coin' class='currency-icon'> `;
+        priceSpan.style.marginLeft = '2.2em';
+        const rewardSpan = document.createElement('span');
+        rewardSpan.innerHTML = `${act.reward} <img src='./images/crystalimage.png' alt='Crystal' class='currency-icon'> `;
+        rewardSpan.style.marginLeft = '2.2em';
+        div.appendChild(nameSpan);
+        div.appendChild(priceSpan);
+        div.appendChild(rewardSpan);
         // Complete button
         const btn = document.createElement('button');
-        btn.textContent = 'Complete';
+        if (coins >= act.price) {
+           
+         btn.textContent = "✅";
+         btn.style.background = "#008000";
+        } else {
+         btn.textContent = "🎯";
+          btn.style.background = "#e67e22";
+        }
         btn.className = 'settingsBtn activityCompleteBtn';
-        btn.style.background = themeObj.btn;
-        btn.style.color = themeObj.text;
         btn.onclick = function() {
             if (coins >= act.price) {
+                addCrystals(act.reward);
                 subtractCoins(act.price);
                 todoActivities.splice(idx, 1);
                 saveTodoActivities();
@@ -1879,27 +1839,31 @@ function renderTodoActivities() {
                 showCustomAlert(`Completed: ${act.name}`, "success");
                 calculateCompletionTimeEstimate();
             } else {
-                showCustomAlert("Not enough coins!", "error");
-            }
-        };
-        // Set Goal button
-        const goalbtn = document.createElement('button');
-        goalbtn.textContent = 'Set Goal';
-        goalbtn.className = 'settingsBtn activityCompleteBtn goalBtn';
-        goalbtn.style.background = themeObj.btn;
-        goalbtn.style.color = themeObj.text;
-        goalbtn.onclick = function() {
-            if (coins < act.price) {
-                SetGoal(act.price);
+                 SetGoal(act.price);
                 showCustomAlert(`Goal set to: ${act.price}`, "success");
-            } else {
-                showCustomAlert("You already have enough coins to complete this activity", "info");
             }
         };
+        // Renıve button
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = "❌";
+        removeBtn.className = 'settingsBtn activityCompleteBtn';
+        removeBtn.onclick = function() {
+            // Ask for pin
+            let IfSuccess = getPIN();
+            if (!IfSuccess) return;
+           
+
+            todoActivities.splice(idx, 1);
+            saveTodoActivities();
+            renderTodoActivities();
+            calculateCompletionTimeEstimate();
+        };
+        
         div.appendChild(nameSpan);
         div.appendChild(priceSpan);
+        div.appendChild(rewardSpan);
         div.appendChild(btn);
-        div.appendChild(goalbtn);
+        div.appendChild(removeBtn);
         list.appendChild(div);
     });
     // Save todoActivities after rendering (in case of any changes)
@@ -1931,11 +1895,13 @@ function calculateCompletionTimeEstimate() {
 const modal = document.getElementById('activityModal');
 document.getElementById('addActivityBtn').onclick = function() {
 
-   
+   let IfSuccess = getPIN();
+   if (!IfSuccess) return;
 
     modal.style.display = 'flex';
     document.getElementById('activityNameInput').value = '';
     document.getElementById('activityPriceInput').value = 10;
+    document.getElementById('activityRewardInput').value = 10;
 };
 document.getElementById('cancelActivityBtn').onclick = function() {
     modal.style.display = 'none';
@@ -1943,11 +1909,16 @@ document.getElementById('cancelActivityBtn').onclick = function() {
 document.getElementById('confirmActivityBtn').onclick = function() {
     const name = document.getElementById('activityNameInput').value.trim();
     const price = parseInt(document.getElementById('activityPriceInput').value);
+    const reward = parseInt(document.getElementById('activityRewardInput').value);
+     if (!name || !reward || reward < 1) {
+        alert('Please enter a valid non-negative crystal reward.');
+        return;
+    }
     if (!name || !price || price < 1) {
         alert('Please enter a valid name and coin price.');
         return;
     }
-    todoActivities.push({ name, price });
+    todoActivities.push({ name, price, reward});
     saveTodoActivities();
     renderTodoActivities();
     modal.style.display = 'none';
