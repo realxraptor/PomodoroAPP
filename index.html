@@ -160,7 +160,7 @@ h1 {
 }
 
 .timer {
-  font-size: 4.5em;
+  font-size: 6em;
   text-align: center;
   margin: 0.25em 0;
 }
@@ -657,7 +657,9 @@ button:disabled {
                       <option value="crystal">Crystal</option>
                     </select>
                      <input type="number" id="setCurrencyValue" min="0" max="23" value="1" style="width:60px;">
-                    <button id="setCurrencyBtn" class="currencyBtn">Confirm</button>
+                    <button id="setCurrencyBtn" class="currencyBtn">Equalize</button>
+                    <button id="addCurrencyBtn" class="currencyBtn">Add</button>
+                    <button id="subtractCurrencyBtn" class="currencyBtn">Subtract</button>
                       <div id="setCurrencyMsg" style="color:#888; margin-top:8px;"></div>
 </div> 
 <!-- PIN Setting -->
@@ -900,7 +902,7 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             { name: "Ocean",bundle: "Skynature", price: 60, bg: "#e0f7fa", btn: "#00bcd4",Tb: "#b2ebf2", text: "#222" ,},
             { name: "Sunset",bundle: "Skynature", price: 60, bg: "#fff3e0", btn: "#ff9800",Tb: "#ffe0b2", text: "#222" ,},
             { name: "Twilight", bundle: "Skynature",price: 60, bg: "#fce4ec", btn: "#e91e63",Tb: "#f8bbd0", text: "#222" ,},
-
+            {name: "Aurora", bundle: "Skynature", price: 1500, bg: "./ExclusiveThemes/bg_Aurora.jpeg", btn: "#34495e",Tb: "#4f4f4f ", text: "#A3F7BF" ,transparency: 0.1},
 
   { name: "Lemon", bundle: "Fruit",price: 75, bg: "#fffde7", btn: "#ffeb3b",Tb: "#fff9c4", text: "#222" ,},
   { name: "Pineapple", bundle: "Fruit",price: 75, bg: "#fffde7", btn: "#f0e310",Tb: "#bdf17f", text: "#222" ,},
@@ -927,13 +929,17 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             { name: "Amethyst", bundle: "Gemstone", price: 180, bg: "#E6D6F3", btn: "#6A4C93",Tb: "#B088CC", text: "#222" ,},
           { name: "Diamond", bundle: "Gemstone",price: 180, bg: "#F0F8FF", btn: "#8DA9C4",Tb: "#C8D8E4", text: "#222" ,},
               
-            {name: "Wormhole", bundle: "Exclusive", price: 5, bg: "./ExclusiveThemes/bg_Wormhole.jpeg", btn: "#3D4CD4",Tb: "#2E3CB3", text: "#51BAC4" ,transparency: 0.8},
-            {name: "Horizon", bundle: "Exclusive", price: 15, bg: "./ExclusiveThemes/bg_Horizon.png", btn: "#2046A1",Tb: "#7D03FF", text: "#03164A" ,transparency: 0.3},
-            {name: "Saturn", bundle: "Exclusive", price: 15, bg: "./ExclusiveThemes/bg_Saturn.jpeg", btn: "#EBC7F0",Tb: "#E387E8", text: "#5E1269" ,transparency: 0.8},
-            {name: "Circuit", bundle: "Exclusive", price: 25, bg: "./ExclusiveThemes/bg_Circuit.jpeg", btn: "#381A89",Tb: "#252B99", text: "#0B0F38" ,transparency: 0.4},
-            {name: "Aurora", bundle: "Exclusive", price: 25, bg: "./ExclusiveThemes/bg_Aurora.jpeg", btn: "#34495e",Tb: "#4f4f4f ", text: "#A3F7BF" ,transparency: 0.1},
+            {name: "Wormhole", bundle: "Galaxy", price: 150, bg: "./ExclusiveThemes/bg_Wormhole.jpeg", btn: "#3D4CD4",Tb: "#2E3CB3", text: "#51BAC4" ,transparency: 0.8},
+            {name: "Horizon", bundle: "Galaxy", price: 300, bg: "./ExclusiveThemes/bg_Horizon.png", btn: "#2046A1",Tb: "#7D03FF", text: "#03164A" ,transparency: 0.3},
+            {name: "Saturn", bundle: "Galaxy", price: 300, bg: "./ExclusiveThemes/bg_Saturn.jpeg", btn: "#EBC7F0",Tb: "#E387E8", text: "#5E1269" ,transparency: 0.8},
+            
+            {name: "Circuit", bundle: "Techno", price: 1500, bg: "./ExclusiveThemes/bg_Circuit.jpeg", btn: "#381A89",Tb: "#252B99", text: "#0B0F38" ,transparency: 0.4},
+            {name: "Matrix", bundle: "Techno", price: 1500, bg: "./ExclusiveThemes/bg_Matrix.jpeg", btn: "#0B3D0B",Tb: "#1F7A1F", text: "#E0FFE0" ,transparency: 0.3},
+             
+
             {name: "Warrior", bundle: "Exclusive", price: 50, bg: "./ExclusiveThemes/bg_Warrior.jpeg", btn: "#AB305A",Tb: "#5C3B5E", text: "#222" ,transparency: 0.25},
             {name: "Zenith", bundle: "Exclusive", price: 50, bg: "./ExclusiveThemes/bg_Zenith.jpeg", btn: "#BDA644",Tb: "#e6e6e6", text: "#FAE073" ,transparency: 0.1},
+            {name: "Tesseract", bundle: "Exclusive", price: 0, bg: "./ExclusiveThemes/bg_Tesseract.jpeg", btn: "#34495e",Tb: "#4f4f4f ", text: "#fff" ,transparency: 0.4},
   
 
            
@@ -1054,6 +1060,14 @@ function showCustomAlert(message, type = 'success', duration = 3000) {
             if (document.getElementById('setCurrencyBtn')) {
                 document.getElementById('setCurrencyBtn').style.background = theme.btn;
                 document.getElementById('setCurrencyBtn').style.color = theme.text;
+            }
+            if (document.getElementById('addCurrencyBtn')) {
+                document.getElementById('addCurrencyBtn').style.background = theme.btn;
+                document.getElementById('addCurrencyBtn').style.color = theme.text;
+            }
+            if (document.getElementById('subtractCurrencyBtn')) {
+                document.getElementById('subtractCurrencyBtn').style.background = theme.btn;
+                document.getElementById('subtractCurrencyBtn').style.color = theme.text;
             }
           
             // PIN setting buttons
@@ -1426,6 +1440,74 @@ document.getElementById('setCurrencyBtn').onclick = function() {
   document.getElementById('setCurrencyValue').value = '';
 };
 
+document.getElementById('addCurrencyBtn').onclick = function() {
+  const type = document.getElementById('setCurrencyType').value;
+  const value = parseInt(document.getElementById('setCurrencyValue').value);
+  const msg = document.getElementById('setCurrencyMsg');
+  if (isNaN(value) || value < 0) {
+    msg.textContent = "Please enter a valid non-negative number.";
+    msg.style.color = "#e74c3c";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+    return;
+  }
+  if (type === 'coins') {
+    addCoins(value);
+    saveCoins();
+    updateCoinsDisplay();
+    msg.textContent = `${value} coins added`;
+    msg.style.color = "#2ecc71";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+  } else if (type === 'crystal') {
+    addCrystals(value);
+    saveCrystals();
+    updateCrystalsDisplay();
+    msg.textContent = `${value} crystals added`;
+    msg.style.color = "#2ecc71";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+  }
+ 
+};
+
+document.getElementById('subtractCurrencyBtn').onclick = function() {
+  const type = document.getElementById('setCurrencyType').value;
+  const value = parseInt(document.getElementById('setCurrencyValue').value);
+  const msg = document.getElementById('setCurrencyMsg');
+  if (isNaN(value) || value < 0) {
+    msg.textContent = "Please enter a valid non-negative number.";
+    msg.style.color = "#e74c3c";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+    return;
+  }
+  if (type === 'coins') {
+    subtractCoins(value);
+    saveCoins();
+    updateCoinsDisplay();
+    msg.textContent = `${value} coins subtracted`;
+    msg.style.color = "#2ecc71";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+  } else if (type === 'crystal') {
+    subtractCrystals(value);
+    saveCrystals();
+    updateCrystalsDisplay();
+    msg.textContent = `${value} crystals subtracted`;
+    msg.style.color = "#2ecc71";
+     setTimeout(function() {
+     msg.textContent = "";
+        }, 1000); // 1000ms = 1 saniye
+  }
+  
+};
+
 
         // --- Event Listeners for Timer Modes ---
         document.getElementById('studyMode').addEventListener('change', function() {
@@ -1625,7 +1707,14 @@ if (!IfSuccess) return;
                      
                  // Exclusive themes and other themes are different
 if (theme.bundle === "Exclusive") {
-                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/crystalimage.png' alt='Crystal' class='currency-icon'>`;        
+
+                   if (theme.price == 0) {
+
+                    btn.innerHTML = `${theme.name} - Free <img src='./images/crystalimage.png' alt='Crystal' class='currency-icon'>`;
+                   
+                   } else { 
+                        btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/crystalimage.png' alt='Crystal' class='currency-icon'>`;        
+                    }
                     btn.onclick = function() {
                         if (crystals >= theme.price) {
                      
@@ -1639,8 +1728,13 @@ if (theme.bundle === "Exclusive") {
                         }
                     };
 }   else {
+                   if (theme.price == 0) {
 
-                    btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/coinimage.png' alt='Coin' class='currency-icon'>`;        
+                      btn.innerHTML = `${theme.name} - Free <img src='./images/coinimage.png' alt='Coin' class='currency-icon'>`;        
+                   } else { 
+                           btn.innerHTML = `${theme.name} - ${theme.price} <img src='./images/coinimage.png' alt='Coin' class='currency-icon'>`;        
+                    }
+                
                     btn.onclick = function() {
                         if (coins >= theme.price) {
                      
